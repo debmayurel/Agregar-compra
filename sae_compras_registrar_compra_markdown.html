@@ -1,0 +1,4094 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SAE Compras — Registrar Compra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --sae: #2563eb;
+      --sae-hover: #1d4ed8;
+      --sae-soft: #eff6ff;
+      --sae-soft-2: #dbeafe;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --line-2: #cbd5e1;
+      --danger: #ef4444;
+      --danger-soft: #fef2f2;
+      --success: #10b981;
+      --success-soft: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-soft: #fff7ed;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --input-h: 42px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: #f1f5f9;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    /* Background app preview */
+    .app-bg {
+      position: fixed;
+      inset: 0;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+
+    .app-top {
+      height: 72px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px 0 78px;
+    }
+
+    .fake-search {
+      width: 300px;
+      height: 38px;
+      border: 1px solid #cbd5e1;
+      border-radius: 22px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      padding: 0 16px
+    }
+
+    .app-side {
+      position: absolute;
+      left: 0;
+      top: 72px;
+      bottom: 0;
+      width: 60px;
+      background: #f8fafc;
+      border-right: 1px solid #e2e8f0
+    }
+
+    .app-side .dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      margin: 16px auto;
+      background: #f1f5f9
+    }
+
+    .app-side .dot.active {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe
+    }
+
+    .app-content {
+      margin-left: 60px;
+      padding: 28px
+    }
+
+    .app-hero {
+      height: 240px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)
+    }
+
+    .app-table {
+      height: 460px;
+      background: #fff;
+      margin-top: 18px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px
+    }
+
+    .app-dim {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 3vh 4vw;
+      max-width: 1540px;
+      margin: auto;
+      height: 94vh;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      z-index: 20;
+    }
+
+    .modal-header {
+      flex: 0 0 auto;
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .modal-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .title-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--sae-soft);
+      color: var(--sae);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      border: 1px solid var(--sae-soft-2);
+    }
+
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #0f172a
+    }
+
+    .modal-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 5px
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 14px
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: filter 0.15s ease;
+    }
+
+    .status-pill:hover {
+      filter: brightness(0.96);
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .status-pill.pending {
+      background: var(--warning-soft);
+      color: #b45309;
+      border-color: #fde68a;
+    }
+
+    .status-pill.collected {
+      background: var(--success-soft);
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+
+    .status-pill-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 22px 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      border: 1px solid transparent;
+      position: relative;
+      transition: filter 0.15s ease;
+    }
+
+    .status-pill-select:hover {
+      filter: brightness(0.96);
+    }
+
+    .status-pill-select::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    .status-pill-select::after {
+      content: "";
+      position: absolute;
+      right: 9px;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: translateY(-65%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .status-pill-select select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: inherit;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+    }
+
+    .status-pill-select select:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .status-pill-select.pending {
+      background: var(--warning-soft);
+      color: #b45309;
+      border-color: #fde68a;
+    }
+
+    .status-pill-select.collected {
+      background: var(--success-soft);
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #cbd5e1
+    }
+
+
+
+    .modal-body {
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
+      background: #f8fafc;
+      scroll-behavior: smooth;
+    }
+
+    .body-layout {
+      flex: 1 1 auto;
+      height: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 0 minmax(0, 1fr);
+      grid-template-rows: 100%;
+      transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .body-layout.preview-open {
+      grid-template-columns: 360px minmax(0, 1fr)
+    }
+
+    .document-preview {
+      display: block;
+      height: 100%;
+      min-height: 0;
+      background: #f1f5f9;
+      overflow: hidden;
+      padding: 0;
+      border-right: 0;
+      transition: padding 0.3s, border-right 0.3s;
+    }
+
+    .preview-open .document-preview {
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      overflow: auto;
+    }
+
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .preview-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #0f172a
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 6px
+    }
+
+    .preview-page {
+      background: #fff;
+      min-height: 610px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      padding: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    .preview-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: #1e3a8a;
+      font-size: 13px
+    }
+
+    .preview-hint {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #64748b;
+      text-align: center
+    }
+
+    .form-wrap {
+      padding: 20px 24px 24px;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sections-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .main-form-col {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-sidebar {
+      position: sticky;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #fff;
+      margin: -20px -24px -24px 0;
+      padding: 20px 24px 24px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-card {
+      scroll-margin-top: 48px;
+    }
+
+    .card-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #fafbfc;
+      border-top-left-radius: calc(var(--radius) - 1px);
+      border-top-right-radius: calc(var(--radius) - 1px);
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a
+    }
+
+    .num {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--sae-soft);
+      color: var(--sae);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--sae-soft-2);
+    }
+
+    .card-body {
+      padding: 20px
+    }
+
+    .general-card .card-body {
+      padding-bottom: 16px
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px
+    }
+
+    .g4 {
+      grid-template-columns: 0.9fr 1.5fr 0.9fr 1.2fr
+    }
+
+    .g-doc {
+      grid-template-columns: 0.8fr 1.1fr 1.1fr 1fr
+    }
+
+    .g3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+
+    .g2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .field {
+      transition: all 0.2s ease;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin: 0 0 6px 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .req {
+      color: var(--danger)
+    }
+
+    .control {
+      width: 100%;
+      height: var(--input-h);
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      padding: 0 12px;
+      color: var(--text);
+      outline: none;
+      font-size: 13px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .control:focus {
+      border-color: var(--sae);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), var(--shadow-sm)
+    }
+
+    textarea.control {
+      height: auto;
+      padding-top: 10px;
+      resize: vertical
+    }
+
+    .input-group {
+      display: flex
+    }
+
+    .input-group .control {
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      border-right: none
+    }
+
+    .input-group .search-btn {
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      border-left: none
+    }
+
+    .search-btn {
+      width: 44px;
+      border: 1px solid var(--line-2);
+      background: #f8fafc;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .search-btn:hover {
+      background: #f1f5f9;
+      color: var(--sae)
+    }
+
+    .input-group:focus-within .search-btn {
+      border-color: var(--sae);
+      background: var(--sae-soft);
+      color: var(--sae)
+    }
+
+    .help {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 5px
+    }
+
+    .error {
+      font-size: 11px;
+      color: var(--danger);
+      margin: 5px 0 0 2px;
+      display: none;
+      font-weight: 500
+    }
+
+    .field.invalid {
+      animation: shake 0.25s ease-in-out;
+    }
+
+    .field.invalid .control {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15)
+    }
+
+    .field.invalid .error {
+      display: block
+    }
+
+    /* policies */
+    .policy-row {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 14px
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155
+    }
+
+    .switch {
+      width: 40px;
+      height: 22px;
+      border-radius: 999px;
+      background: #cbd5e1;
+      position: relative;
+      border: none;
+      padding: 0;
+      transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.15);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .switch.on {
+      background: #10b981
+    }
+
+    .switch.on::after {
+      transform: translateX(18px)
+    }
+
+    .info {
+      color: #94a3b8;
+      font-size: 12px;
+      cursor: pointer
+    }
+
+    .info:hover {
+      color: var(--sae)
+    }
+
+    /* Document */
+    .doc-extra {
+      margin-top: 14px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px
+    }
+
+    .doc-found {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .fact {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px
+    }
+
+    .fact span {
+      display: block;
+      font-size: 10px;
+      color: #64748b;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-weight: 600
+    }
+
+    .fact strong {
+      font-size: 13px;
+      color: #0f172a
+    }
+
+    /* purchase */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      height: 40px;
+      border-radius: var(--radius-sm);
+      padding: 0 16px;
+      border: 1px solid var(--line-2);
+      background: #fff;
+      color: #334155;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a
+    }
+
+    .btn-primary {
+      background: var(--sae);
+      border-color: var(--sae);
+      color: #fff
+    }
+
+    .btn-primary:hover {
+      background: var(--sae-hover);
+      border-color: var(--sae-hover);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2)
+    }
+
+    .btn-soft {
+      background: var(--sae-soft);
+      border-color: rgba(37, 99, 235, 0.2);
+      color: var(--sae);
+      box-shadow: none
+    }
+
+    .btn-soft:hover {
+      background: var(--sae-soft-2);
+      color: var(--sae-hover)
+    }
+
+    .btn-danger {
+      background: #fff;
+      border-color: #fca5a5;
+      color: var(--danger)
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-soft);
+      border-color: #ef4444;
+      color: var(--danger)
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 12px;
+      border-radius: 6px
+    }
+
+    .quick-menu {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .quick-pill {
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      padding: 0 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .quick-pill:hover {
+      border-color: var(--sae);
+      color: var(--sae);
+      background: var(--sae-soft)
+    }
+
+    .table-wrap {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 700;
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle
+    }
+
+    tbody tr {
+      transition: background-color 0.15s ease
+    }
+
+    tbody tr:hover {
+      background-color: #fafbfc
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0
+    }
+
+    .cell {
+      width: 100%;
+      height: 36px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 0 8px;
+      background: transparent;
+      font-size: 13px;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .cell:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1
+    }
+
+    .cell:focus {
+      background: #fff;
+      border-color: var(--sae);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15)
+    }
+
+    .cell.desc {
+      min-width: 200px
+    }
+
+    .money {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      font-weight: 600
+    }
+
+    .chk {
+      width: 17px;
+      height: 17px;
+      cursor: pointer
+    }
+
+    .ret-col.hidden-col {
+      display: none
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--sae-soft);
+      color: var(--sae);
+      border: 1px solid rgba(37, 99, 235, 0.15);
+    }
+
+    /* summary */
+    .purchase-summary {
+      margin-top: 16px
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px
+    }
+
+    .summary-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .summary-head {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px
+    }
+
+    .sum-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: #475569
+    }
+
+    .sum-line strong {
+      font-variant-numeric: tabular-nums;
+      color: #0f172a;
+      font-weight: 600
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 10px 0
+    }
+
+    .tax-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px
+    }
+
+    .tax-group:first-of-type {
+      margin-top: 0
+    }
+
+    .tax-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sae);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em
+    }
+
+    .summary-sidebar-panel {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .summary-sec {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .summary-sec-title {
+      margin: 0 0 4px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .summary-row strong {
+      font-variant-numeric: tabular-nums;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .summary-row.highlight {
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 4px;
+    }
+
+    .summary-row.highlight strong {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .summary-row .negative {
+      color: var(--danger);
+    }
+
+    .calc-popover {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 280px;
+      background: #ffffff;
+      border: 1px solid var(--line-2);
+      border-radius: 10px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      padding: 14px;
+      z-index: 1000;
+      display: none;
+      font-size: 12px;
+      color: #334155;
+      animation: slideDown 0.15s ease-out;
+      text-align: left;
+    }
+
+    .calc-popover::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 12px;
+      border: 6px solid transparent;
+      border-bottom-color: #fff;
+    }
+
+    .calc-popover::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 11px;
+      border: 7px solid transparent;
+      border-bottom-color: var(--line-2);
+      z-index: -1;
+    }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--line);
+      margin: 6px 0;
+    }
+
+    .payable-block {
+      background: #ffffff;
+      border: 1px solid var(--line-2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .payable-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e40af;
+    }
+
+    .payable-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--sae);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .balance-block {
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .balance-block.pending {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+    }
+
+    .balance-block.paid {
+      background: var(--success-soft);
+      border: 1px solid #bbf7d0;
+    }
+
+    .balance-block.overpaid {
+      background: var(--danger-soft);
+      border: 1px solid #fecaca;
+    }
+
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(0, 0, 0, 0.06);
+    }
+
+    .balance-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .balance-block.paid .balance-label {
+      color: #065f46;
+    }
+
+    .balance-block.overpaid .balance-label {
+      color: #991b1b;
+    }
+
+    .balance-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .balance-block.paid .balance-val {
+      color: var(--success);
+    }
+
+    .balance-block.overpaid .balance-val {
+      color: var(--danger);
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    .seg-btn {
+      border: 0;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .seg-btn.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* payment */
+    .empty-state {
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius);
+      background: #f8fafc;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .empty-state:hover {
+      border-color: #94a3b8;
+      background: #f1f5f9
+    }
+
+    .empty-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+      margin-bottom: 4px
+    }
+
+    .payment-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 16px;
+      margin-top: 16px
+    }
+
+    /* Footer */
+    .modal-footer {
+      flex: 0 0 auto;
+      min-height: 72px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+    }
+
+    .footer-kpis {
+      display: flex;
+      gap: 32px;
+      align-items: center
+    }
+
+    .kpi {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.02em
+    }
+
+    .kpi strong {
+      display: block;
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 8px
+    }
+
+    /* payment dialog */
+    .payment-dialog-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 50;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .payment-dialog {
+      width: min(1250px, 96vw);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      animation: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .payment-dialog .head {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc
+    }
+
+    .payment-dialog .head strong {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      color: #0f172a
+    }
+
+    .payment-dialog .body {
+      padding: 24px
+    }
+
+    .payment-dialog .foot {
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: #f8fafc
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-4px);
+      }
+
+      75% {
+        transform: translateX(4px);
+      }
+    }
+
+    /* responsive */
+    @media(max-width:1100px) {
+      .modal {
+        inset: 2vh 2vw;
+        height: 96vh
+      }
+
+      .g4,
+      .g-doc {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .purchase-summary {
+        grid-template-columns: 1fr
+      }
+
+      .form-wrap {
+        grid-template-columns: 1fr
+      }
+
+      .main-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      #paymentTotalCard,
+      #igtfCard {
+        margin-top: 0 !important
+      }
+
+      .total-panel {
+        position: static
+      }
+
+      .body-layout.preview-open {
+        grid-template-columns: 280px minmax(0, 1fr)
+      }
+
+      .doc-found {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:760px) {
+      .modal {
+        inset: 0;
+        height: 100vh;
+        border-radius: 0
+      }
+
+      .g4,
+      .g3,
+      .g2,
+      .g-doc {
+        grid-template-columns: 1fr
+      }
+
+      .body-layout.preview-open {
+        grid-template-columns: 1fr
+      }
+
+      .document-preview {
+        position: relative;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line)
+      }
+
+      .main-sidebar {
+        grid-template-columns: 1fr
+      }
+
+      .footer-kpis {
+        display: none
+      }
+    }
+
+    @media(max-width:480px) {
+      .modal-header {
+        padding: 0 12px;
+        height: 60px;
+      }
+
+      .title-icon {
+        display: none
+      }
+
+      .modal-title {
+        font-size: 16px
+      }
+
+      .modal-sub {
+        display: none
+      }
+
+      .form-wrap {
+        padding: 12px 10px 16px
+      }
+
+      .card-head {
+        padding: 10px 12px
+      }
+
+      .card-body {
+        padding: 14px 10px
+      }
+
+      .policy-row {
+        gap: 8px 12px;
+        padding: 10px
+      }
+
+      .segmented-control {
+        padding: 2px;
+      }
+
+      .seg-btn {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
+    }
+
+    .pinned-general-wrap {
+      flex: 0 0 auto;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+    }
+
+    .pinned-general-wrap .general-card {
+      margin-bottom: 0;
+      box-shadow: none;
+    }
+
+    .pinned-general-wrap .general-card:hover {
+      box-shadow: none;
+      border-color: var(--line);
+    }
+
+    .card-check-badge {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #10b981;
+      background: #ecfdf5;
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      border-radius: 999px;
+      padding: 3px 8px;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .card-check-badge.visible {
+      display: inline-flex;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .product-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .product-item:hover {
+      background: var(--sae-soft);
+      color: var(--sae);
+    }
+
+    /* Outlined Select / Searchable Dropdown for Concepto del egreso */
+    .outlined-select-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .outlined-select-box {
+      position: relative;
+      width: 100%;
+      height: var(--input-h);
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .outlined-select-box:focus-within {
+      border-color: var(--sae);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), var(--shadow-sm);
+    }
+
+    .outlined-select-label {
+      position: absolute;
+      left: 10px;
+      top: -7px;
+      background: #fff;
+      padding: 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      pointer-events: none;
+    }
+
+    .outlined-select-box:focus-within .outlined-select-label {
+      color: var(--sae);
+    }
+
+    .outlined-select-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13px;
+      color: var(--text);
+      padding: 0;
+      cursor: text;
+    }
+
+    .outlined-select-arrow {
+      color: var(--muted);
+      pointer-events: none;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease;
+    }
+
+    .outlined-select-container.open .outlined-select-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown list */
+    .outlined-dropdown-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow);
+      z-index: 100;
+      max-height: 280px;
+      overflow-y: auto;
+      display: none;
+      animation: slideDown 0.15s ease-out;
+    }
+
+    .outlined-select-container.open .outlined-dropdown-list {
+      display: block;
+    }
+
+    /* Tree items styling */
+    .tree-item {
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .tree-item:hover {
+      background-color: var(--sae-soft);
+      color: var(--sae);
+    }
+
+    /* Indentations for hierarchy */
+    .tree-depth-0 {
+      font-weight: 700;
+      color: #1e3a8a;
+      background: #fafbfc;
+      border-bottom: 1px solid var(--line);
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .tree-depth-0:not(.none-option):hover {
+      background: #fafbfc;
+      color: #1e3a8a;
+      cursor: default;
+    }
+
+    .tree-depth-1 {
+      padding-left: 24px;
+      font-style: italic;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .tree-depth-2 {
+      padding-left: 40px;
+      color: #334155;
+    }
+
+    .tree-depth-3 {
+      padding-left: 56px;
+      color: #556070;
+    }
+
+    .tree-item.none-option {
+      font-style: italic;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-bg">
+    <div class="app-top">
+      <div class="fake-search">⌕&nbsp;&nbsp; Buscar aquí...</div>
+      <div style="font-size:12px;color:#64748b">Período: <strong style="color:#0253ac">AGOSTO
+          2026</strong>&nbsp;&nbsp;&nbsp; B Y C COMPUTACION, C.A.</div>
+    </div>
+    <div class="app-side">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="app-content">
+      <div class="app-hero"></div>
+      <div class="app-table"></div>
+    </div>
+  </div>
+  <div class="app-dim"></div>
+
+  <div class="modal" role="dialog" aria-modal="true">
+    <header class="modal-header">
+      <div class="modal-title-wrap">
+        <div class="title-icon"><i data-lucide="receipt"></i></div>
+        <div>
+          <div style="display:flex;align-items:center">
+            <div class="modal-title">Registrar Compra</div>
+          </div>
+          <div class="modal-sub">Registro de documento, compra, retenciones y pagos</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <button class="icon-btn" id="togglePreviewTop" title="Mostrar documento"><i
+            data-lucide="file-text"></i></button>
+        <button class="icon-btn" title="Cerrar"
+          onclick="document.querySelector('.modal').style.display='none'; document.querySelector('.app-dim').style.display='none';"><i
+            data-lucide="x"></i></button>
+      </div>
+    </header>
+
+    <div class="pinned-general-wrap">
+      <!-- General -->
+      <section class="card general-card">
+        <div class="card-body">
+          <div class="grid g4">
+            <div class="field" id="expenseField">
+              <div class="outlined-select-container" id="expenseContainer">
+                <div class="outlined-select-box" id="expenseSelectBox">
+                  <span class="outlined-select-label">Concepto del egreso <span class="req">*</span></span>
+                  <input class="outlined-select-input" id="expenseSearchInp" placeholder="Seleccionar..."
+                    autocomplete="off" value="5.1 - COSTOS DE VENTAS">
+                  <span class="outlined-select-arrow"><i data-lucide="chevron-down"
+                      style="width: 16px; height: 16px;"></i></span>
+                </div>
+                <div class="outlined-dropdown-list" id="expenseDropdownList">
+                  <!-- Dynamically rendered tree items will go here -->
+                </div>
+                <input type="hidden" id="expense" value="5.1 - COSTOS DE VENTAS">
+              </div>
+              <div class="error" id="expenseError" style="margin-top: 5px;">Seleccione un concepto de egreso.</div>
+            </div>
+            <div class="field" id="providerField">
+              <div class="outlined-select-container" id="providerContainer" style="display: flex;">
+                <div class="outlined-select-box" id="providerSelectBox"
+                  style="border-radius: var(--radius-sm) 0 0 var(--radius-sm); border-right: none; flex: 1;">
+                  <span class="outlined-select-label">Proveedor <span class="req">*</span></span>
+                  <input class="outlined-select-input" id="providerSearchInp" placeholder="Buscar proveedor..."
+                    autocomplete="off" value="CENTRO COMERCIAL COMERCIO, C.A.">
+                  <span class="outlined-select-arrow" style="margin-right: 6px;"><i data-lucide="chevron-down"
+                      style="width: 16px; height: 16px;"></i></span>
+                </div>
+                <button class="search-btn" id="openAddProviderBtn"
+                  style="height: var(--input-h); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--sae); background: var(--sae-soft); width: 44px; border: 1px solid var(--line-2); flex: 0 0 auto;"
+                  title="Agregar nuevo proveedor"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
+                <div class="outlined-dropdown-list" id="providerDropdownList">
+                  <!-- Dynamically rendered providers will go here -->
+                </div>
+                <input type="hidden" id="provider" value="CENTRO COMERCIAL COMERCIO, C.A.">
+              </div>
+              <div class="error" id="providerError" style="margin-top: 5px;">Seleccione un proveedor.</div>
+            </div>
+            <div class="field" id="budgetField">
+              <div class="outlined-select-container" id="budgetContainer">
+                <div class="outlined-select-box" id="budgetSelectBox">
+                  <span class="outlined-select-label">Partida asociada</span>
+                  <input class="outlined-select-input" id="budgetSearchInp" placeholder="Seleccionar..."
+                    autocomplete="off" value="Sin partida">
+                  <span class="outlined-select-arrow"><i data-lucide="chevron-down"
+                      style="width: 16px; height: 16px;"></i></span>
+                </div>
+                <div class="outlined-dropdown-list" id="budgetDropdownList">
+                  <!-- Budget list will go here -->
+                </div>
+                <input type="hidden" id="budget" value="Sin partida">
+              </div>
+            </div>
+            <div class="field" id="descriptionField">
+              <div class="outlined-select-container" id="descriptionContainer">
+                <div class="outlined-select-box" id="descriptionSelectBox">
+                  <span class="outlined-select-label">Descripción</span>
+                  <input class="outlined-select-input" id="description"
+                    value="Servicios de mantenimiento preventivo de equipos.">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="policy-row">
+            <div class="switch-row">
+              <button class="switch on" id="multiRet"></button>
+              <span>Asociar múltiples conceptos de retención</span>
+              <span class="info" title="Permite asignar un concepto ISLR por línea."><i data-lucide="help-circle"
+                  style="width: 14px; height: 14px; vertical-align: middle;"></i></span>
+            </div>
+            <div class="switch-row">
+              <button class="switch" id="physical"></button>
+              <span>¿Factura en físico?</span>
+              <span class="info"><i data-lucide="help-circle"
+                  style="width: 14px; height: 14px; vertical-align: middle;"></i></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+
+    <div class="body-layout" id="bodyLayout">
+      <aside class="document-preview">
+        <div class="preview-toolbar">
+          <span class="preview-title">Documento adjunto</span>
+          <div class="preview-actions">
+            <button class="icon-btn" id="zoomOut" title="Reducir"><i data-lucide="zoom-out"></i></button>
+            <button class="icon-btn" id="zoomIn" title="Ampliar"><i data-lucide="zoom-in"></i></button>
+            <button class="icon-btn" id="collapsePreview" title="Contraer"><i
+                data-lucide="arrow-left-to-line"></i></button>
+          </div>
+        </div>
+        <div class="preview-page" id="previewPage"
+          style="padding: 0; overflow: hidden; background: #fff; display: flex; align-items: flex-start; justify-content: center;">
+          <img src="factura_adjunta.jpg" alt="Factura adjunta"
+            style="width: 100%; height: auto; display: block; border-radius: 12px;">
+        </div>
+        <div class="preview-hint">Vista previa ilustrativa del archivo adjunto.</div>
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button class="btn btn-sm" style="flex:1"><i data-lucide="external-link"></i> Abrir</button>
+          <button class="btn btn-sm btn-soft" style="flex:1"><i data-lucide="refresh-cw"></i> Reemplazar</button>
+        </div>
+      </aside>
+
+      <main class="modal-body" id="scrollArea">
+        <div class="form-wrap">
+          <div class="main-form-col">
+            <div class="sections-stack">
+
+              <!-- Documento -->
+              <section class="card section-card" id="documento">
+                <div class="card-head">
+                  <div class="card-title"><span class="num">1</span>Detalles del Documento de Compra</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+                    <span class="card-check-badge" id="docCheckBadge">
+                      <i data-lucide="check" style="width:12px;height:12px"></i> Listo
+                    </span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="grid g3">
+                    <div class="field" id="docTypeField">
+                      <label>Tipo de Documento <span class="req">*</span></label>
+                      <select class="control" id="docType">
+                        <option>Factura</option>
+                        <option>Nota de Crédito</option>
+                        <option>Nota de Débito</option>
+                      </select>
+                    </div>
+                    <div class="field" id="dateField">
+                      <label>Fecha Documento <span class="req">*</span></label>
+                      <input class="control" id="docDate" type="date" value="2026-08-20">
+                      <div class="error">Indique la fecha del documento.</div>
+                    </div>
+                    <div class="field">
+                      <label>Fecha de Registro en Libro</label>
+                      <input class="control" type="date" value="2026-08-20">
+                    </div>
+                  </div>
+
+                  <div class="grid g-doc" style="margin-top:10px">
+                    <div class="field" id="serieField">
+                      <label style="white-space: nowrap;">Serie de Documento</label>
+                      <input class="control" placeholder="Ej. A">
+                    </div>
+                    <div class="field" id="numberField">
+                      <label>Número de Documento <span class="req">*</span></label>
+                      <input class="control" id="docNumber" value="00133473">
+                      <div class="error">Indique el número de documento.</div>
+                    </div>
+                    <div class="field" id="controlField">
+                      <label>Número de Control <span class="req">*</span></label>
+                      <input class="control" id="controlNumber" value="Z1F0021845">
+                      <div class="error">Indique el número de control.</div>
+                    </div>
+                    <div class="field">
+                      <label>Adjuntar documento</label>
+                      <button class="btn btn-soft" style="width:100%" id="attachBtn"><i data-lucide="paperclip"></i>
+                        Adjuntar / visualizar</button>
+                    </div>
+                  </div>
+
+                  <div class="doc-extra hidden" id="affectedBlock">
+                    <div class="card-title" style="font-size:12px;margin-bottom:8px">Documento afectado</div>
+                    <div class="grid g2">
+                      <div class="field" id="affectedField">
+                        <label>Número de Documento Afectado <span class="req">*</span></label>
+                        <div class="input-group">
+                          <input class="control" id="affectedNumber" placeholder="Buscar factura relacionada">
+                          <button class="search-btn" id="searchAffected"><i data-lucide="search"
+                              style="width: 16px; height: 16px;"></i></button>
+                        </div>
+                        <div class="error">Debe asociar el documento afectado.</div>
+                      </div>
+                      <div class="field">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-soft" id="searchAffected2"><i data-lucide="search"></i> Buscar
+                          documento</button>
+                      </div>
+                    </div>
+                    <div class="doc-found hidden" id="docFound">
+                      <div class="fact"><span>Fecha de documento</span><strong>14/08/2026</strong></div>
+                      <div class="fact"><span>Monto Total Documento</span><strong>232.000,00 Bs</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Compra -->
+              <section class="card section-card" id="compra">
+                <div class="card-head">
+                  <div class="card-title"><span class="num">2</span>Detalle de la Compra</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+                    <span class="card-check-badge" id="compraCheckBadge">
+                      <i data-lucide="check" style="width:12px;height:12px"></i> Listo
+                    </span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <!-- Empty state for Compra -->
+                  <div class="empty-state" id="compraEmpty" style="display:none">
+                    <div>
+                      <div class="empty-title">Aún no has añadido conceptos</div>
+                      <div class="help">Haz clic en “Añadir concepto” para agregar el primer producto o servicio a la
+                        compra.</div>
+                    </div>
+                    <button class="btn btn-primary" id="addFirstLine"><i data-lucide="plus"></i> Añadir
+                      concepto</button>
+                  </div>
+
+                  <div id="compraArea">
+                    <div class="toolbar">
+                      <div><strong>Conceptos registrados</strong>
+                        <div class="help">Puede registrar múltiples conceptos de compra.</div>
+                      </div>
+                      <div style="display:flex;gap:8px;align-items:center">
+                        <button class="btn btn-primary" id="addLine"><i data-lucide="plus"></i> Añadir concepto</button>
+                        <button class="btn btn-danger" id="deleteSelectedBtn" title="Eliminar seleccionados"
+                          style="padding:0;width:40px;height:40px;justify-content:center"><i
+                            data-lucide="trash-2"></i></button>
+                      </div>
+                    </div>
+
+                    <div class="table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th style="width:50px;text-align:center"><input type="checkbox" id="selectAllRows"
+                                class="chk"></th>
+                            <th style="width:27%">Producto / Concepto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Alícuota %</th>
+                            <th>Total</th>
+                            <th>Exento</th>
+                            <th class="ret-col">Retención</th>
+                          </tr>
+                        </thead>
+                        <tbody id="itemsBody">
+                          <tr>
+                            <td style="text-align:center"><input type="checkbox" class="chk row-select-chk"></td>
+                            <td><input class="cell desc" value="Monto Servicios"></td>
+                            <td><input class="cell qty" type="number" min="0" step="1" value="1"></td>
+                            <td><input class="cell price" type="number" min="0" step="0.01" value="200000"></td>
+                            <td><select class="cell rate">
+                                <option value="0">0%</option>
+                                <option value="8">8%</option>
+                                <option value="16" selected>16%</option>
+                                <option value="31">31%</option>
+                              </select></td>
+                            <td class="money lineTotal">200.000,00 Bs</td>
+                            <td style="text-align:center"><input class="chk exempt" type="checkbox"></td>
+                            <td class="ret-col"><select class="cell retention">
+                                <option value="0">Sin retención</option>
+                                <option value="3" selected>004 - Honorarios profesionales - 3%</option>
+                                <option value="2">005 - Servicios técnicos - 2%</option>
+                                <option value="5">051 - Porcentaje - 5%</option>
+                              </select></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div> <!-- end sections-stack -->
+          </div> <!-- end main-form-col -->
+
+          <aside class="main-sidebar">
+            <!-- Sección 1: Totales -->
+            <div class="summary-sec">
+              <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:6px">
+                <div class="outlined-select-container" style="display:flex">
+                  <div class="outlined-select-box"
+                    style="flex:1;border-radius:var(--radius-sm) 0 0 var(--radius-sm);border-right:none;padding:0 10px">
+                    <span class="outlined-select-label" style="white-space:nowrap">Tasa de cambio</span>
+                    <input id="refRate" class="outlined-select-input" type="number" step="0.01" min="0.01" value="36.50"
+                      style="font-weight:800;font-variant-numeric:tabular-nums">
+                  </div>
+                  <select id="refCurrency"
+                    style="height:var(--input-h);border:1px solid var(--line-2);border-left:none;border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:#f8fafc;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;padding:0 10px;outline:none;box-shadow:var(--shadow-sm)">
+                    <option value="USD" selected>Bs./$</option>
+                    <option value="EUR">Bs./€</option>
+                    <option value="COP">Bs./COP</option>
+                  </select>
+                </div>
+                <span id="refRateUpdated"
+                  style="font-size:11px;color:var(--muted);padding-left:2px"><strong>BCV</strong>
+                  al 25/08/2026</span>
+              </div>
+              <div class="summary-divider" style="margin-bottom:6px"></div>
+              <h5 class="summary-sec-title">TOTALES</h5>
+              <div style="position: relative;">
+                <div class="payable-block">
+                  <div class="payable-label" style="font-size: 15px; font-weight: 700; white-space: nowrap;">Total
+                    Factura</div>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <div class="payable-val" id="invoiceTotal"
+                      style="font-size: 22px; font-weight: 800; white-space: nowrap;">232.000,00 Bs</div>
+                    <button class="info-popover-btn" id="btnDetailInvoice" title="Ver detalle de cálculo"
+                      style="background:none;border:none;padding:2px;cursor:pointer;color:var(--sae);display:flex;align-items:center;"><i
+                        data-lucide="calculator" style="width:16px;height:16px;"></i></button>
+                  </div>
+                </div>
+
+                <!-- Popover Factura -->
+                <div class="calc-popover" id="popoverInvoice" style="top: calc(100% + 4px); right: 0;">
+                  <div
+                    style="font-weight:700; color:#0f172a; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Detalle de Factura</span>
+                    <i data-lucide="x" style="width:14px; height:14px; cursor:pointer;"
+                      onclick="closeAllPopovers(event)"></i>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="display:flex; justify-content:space-between;"><span>Subtotal Gravable:</span><span
+                        id="popSubtotal" style="font-variant-numeric:tabular-nums; font-weight:600;">0,00 Bs</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;"><span>IVA (16%):</span><span id="popIva"
+                        style="font-variant-numeric:tabular-nums; font-weight:600;">0,00 Bs</span></div>
+                    <div style="display:flex; justify-content:space-between;"><span>Monto Exento:</span><span
+                        id="popExempt" style="font-variant-numeric:tabular-nums; font-weight:600;">0,00 Bs</span></div>
+                    <div
+                      style="border-top:1px dashed #e2e8f0; margin-top:4px; padding-top:4px; display:flex; justify-content:space-between; font-weight:700; color:#0f172a;">
+                      <span>Total Factura:</span><span id="popTotal" style="font-variant-numeric:tabular-nums;">0,00
+                        Bs</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <!-- Sección 2: Retenciones -->
+            <div class="summary-sec">
+
+              <div style="position:relative; margin-bottom: 8px;">
+                <div class="summary-row" style="margin: 0;">
+                  <span>Retención IVA (75%)</span>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <strong id="ivaRetTotal" class="negative">− 24.000,00 Bs</strong>
+                    <button class="info-popover-btn" id="btnDetailIva" title="Ver detalle de cálculo"
+                      style="background:none;border:none;padding:2px;cursor:pointer;color:var(--muted);display:flex;align-items:center;"><i
+                        data-lucide="calculator" style="width:14px;height:14px;"></i></button>
+                  </div>
+                </div>
+
+                <!-- Popover IVA Retention -->
+                <div class="calc-popover" id="popoverIva" style="top: calc(100% + 4px); right: 0;">
+                  <div
+                    style="font-weight:700; color:#0f172a; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Cálculo Retención IVA</span>
+                    <i data-lucide="x" style="width:14px; height:14px; cursor:pointer;"
+                      onclick="closeAllPopovers(event)"></i>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="display:flex; justify-content:space-between;"><span>Total IVA:</span><span
+                        id="popIvaBase" style="font-variant-numeric:tabular-nums; font-weight:600;">0,00 Bs</span></div>
+                    <div style="display:flex; justify-content:space-between;"><span>Porcentaje
+                        Retención:</span><span>75%</span></div>
+                    <div
+                      style="border-top:1px dashed #e2e8f0; margin-top:4px; padding-top:4px; display:flex; justify-content:space-between; font-weight:700; color:var(--danger);">
+                      <span>Monto Retenido:</span><span id="popIvaRet" style="font-variant-numeric:tabular-nums;">0,00
+                        Bs</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="position:relative;">
+                <div class="summary-row" style="margin: 0;">
+                  <span>Retención ISLR</span>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <strong id="islrRetTotal" class="negative">− 6.000,00 Bs</strong>
+                    <button class="info-popover-btn" id="btnDetailIslr" title="Ver detalle de cálculo"
+                      style="background:none;border:none;padding:2px;cursor:pointer;color:var(--muted);display:flex;align-items:center;"><i
+                        data-lucide="calculator" style="width:14px;height:14px;"></i></button>
+                  </div>
+                </div>
+
+                <!-- Popover ISLR Retention -->
+                <div class="calc-popover" id="popoverIslr" style="top: calc(100% + 4px); right: 0;">
+                  <div
+                    style="font-weight:700; color:#0f172a; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Cálculo Retención ISLR</span>
+                    <i data-lucide="x" style="width:14px; height:14px; cursor:pointer;"
+                      onclick="closeAllPopovers(event)"></i>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="display:flex; justify-content:space-between;"><span>Base Imponible:</span><span
+                        id="popIslrBase" style="font-variant-numeric:tabular-nums; font-weight:600;">0,00 Bs</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;"><span>Alícuota Aplicada:</span><span
+                        id="popIslrRate" style="font-variant-numeric:tabular-nums; font-weight:600;">5%</span></div>
+                    <div
+                      style="border-top:1px dashed #e2e8f0; margin-top:4px; padding-top:4px; display:flex; justify-content:space-between; font-weight:700; color:var(--danger);">
+                      <span>Monto Retenido:</span><span id="popIslrRet" style="font-variant-numeric:tabular-nums;">0,00
+                        Bs</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="globalIslrContainer" style="margin-top: 12px; display: none;">
+                <fieldset
+                  style="border: 1px solid var(--line-2); border-radius: var(--radius-sm); padding: 8px 12px 10px; background: #fff; margin: 0;">
+                  <legend
+                    style="font-size: 10px; font-weight: 700; color: var(--muted); padding: 0 6px; text-transform: uppercase; letter-spacing: 0.03em;">
+                    Conceptos I.S.L.R.</legend>
+                  <select class="control" id="globalIslrSelect"
+                    style="height: 36px; padding: 0 8px; font-size: 13px; width: 100%; border-color: var(--line-2); outline: none;">
+                    <option value="0">Sin retención</option>
+                    <option value="3">004 - Honorarios profesionales - 3%</option>
+                    <option value="2">005 - Servicios técnicos - 2%</option>
+                    <option value="5" selected>051 - Porcentaje - 5%</option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <!-- Sección 3: Bloque Total a Pagar (Estilo SaaS azul suave) -->
+            <div class="payable-block" style="flex-direction:column;align-items:stretch;gap:4px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="payable-label" style="font-size: 15px; font-weight: 700;">Total a Pagar</div>
+                <div class="payable-val" id="payable" style="font-size: 22px; font-weight: 800;">202.000,00 Bs</div>
+              </div>
+              <div
+                style="display:flex;justify-content:space-between;align-items:center;border-top:1px dashed rgba(37,99,235,0.15);padding-top:4px;margin-top:2px">
+                <div style="font-size:11px;font-weight:600;color:#2563eb">Total</div>
+                <div style="font-size:13px;font-weight:800;color:#1e40af;font-variant-numeric:tabular-nums"
+                  id="refPayable">0,00 USD</div>
+              </div>
+            </div>
+
+            <!-- Secciones de Pagos e IGTF integradas -->
+            <div id="receiptPaymentSection" style="display:none">
+              <div class="summary-divider"></div>
+              <div class="balance-block" id="balanceBlock">
+                <div class="summary-row"><span>Total Pagado</span><strong id="paidTotal">0,00 Bs</strong></div>
+                <div class="balance-row" style="flex-direction:column;align-items:stretch;gap:4px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+
+                    <span class="balance-val" id="balance">202.000,00 Bs</span>
+                  </div>
+                  <div
+                    style="display:flex;justify-content:space-between;align-items:center;border-top:1px dashed rgba(0,0,0,0.06);padding-top:4px;margin-top:2px">
+                    <span style="font-size:11px;font-weight:600;color:inherit;opacity:0.8">Total ($)</span>
+                    <span style="font-size:13px;font-weight:800;color:inherit;font-variant-numeric:tabular-nums"
+                      id="refBalance">0,00 USD</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sección 5: IGTF (Dinamico) -->
+            <div id="receiptIgtfSection" style="display:none">
+              <div class="summary-divider"></div>
+              <div class="summary-sec">
+                <div class="summary-row"><span>Total IGTF (3%)</span><strong id="igtfAmount">0,00 Bs</strong></div>
+                <div class="summary-row"><span>Factura + IGTF</span><strong id="invoicePlusIgtf">232.000,00
+                    Bs</strong></div>
+              </div>
+            </div>
+
+          </aside>
+        </div> <!-- end form-wrap -->
+      </main>
+    </div> <!-- end body-layout -->
+
+    <footer class="modal-footer">
+      <div class="footer-kpis">
+        <div class="kpi">Total a pagar<strong id="footerPayable">202.000,00 Bs</strong></div>
+        <div class="kpi">Saldo<strong id="footerBalance">202.000,00 Bs</strong></div>
+      </div>
+      <div class="footer-actions">
+        <button class="btn"
+          onclick="alert('Operación cancelada.'); document.querySelector('.modal').style.display='none'; document.querySelector('.app-dim').style.display='none';"><i
+            data-lucide="ban"></i> Cancelar</button>
+        <button class="btn btn-primary" id="totalizeBtn"><i data-lucide="wallet"></i> Totalizar pago</button>
+        <button class="btn btn-soft hidden" id="saveBtn" onclick="alert('Cambios guardados.')"><i
+            data-lucide="save"></i> Guardar</button>
+      </div>
+    </footer>
+  </div>
+
+  <div class="payment-dialog-backdrop" id="paymentModalBackdrop" style="display:none">
+    <div class="payment-dialog" style="width: min(1250px, 96vw); max-width: 1250px;">
+      <div class="head" style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div class="modal-title-wrap" style="display: flex; align-items: center; gap: 12px;">
+          <div class="title-icon"
+            style="width: 36px; height: 36px; border-radius: 8px; background: var(--sae-soft); color: var(--sae); display: grid; place-items: center; border: 1px solid var(--sae-soft-2);">
+            <i data-lucide="wallet" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <div class="modal-title"
+              style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; color: #0f172a;">
+              Totalizar Compra</div>
+            <div class="modal-sub" style="font-size: 11px; color: var(--muted); margin-top: 2px;">Condición de pago,
+              deducciones por retenciones y medios de pago</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+          <span class="card-check-badge" id="pagoCheckBadge">
+            <i data-lucide="check" style="width:12px;height:12px"></i> Listo
+          </span>
+          <span class="status pending" id="payStatus"
+            style="font-size:11px; font-weight:600; padding:4px 8px; border-radius:6px;">Por pagar</span>
+        </div>
+        <button class="icon-btn" id="closePaymentModal" style="margin-left:12px;"><i data-lucide="x"></i></button>
+      </div>
+
+      <div class="body" style="max-height: calc(80vh - 120px); overflow-y: auto; padding: 20px;">
+        <div style="display:grid; grid-template-columns:1fr 320px; gap:20px; align-items:start;">
+          <div>
+            <!-- Condición de Pago y Vencimiento (Diseño outlined como la imagen) -->
+            <div
+              style="background: #fff; border: 1px solid var(--line-2); border-radius: var(--radius); position: relative; margin-bottom: 20px; box-shadow: var(--shadow-sm);">
+              <div
+                style="padding: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: start;"
+                id="conditionGrid">
+
+                <!-- Condición de Pago -->
+                <div class="field" id="condPagoField">
+                  <div class="outlined-select-container" id="condPagoContainer">
+                    <div class="outlined-select-box" id="condPagoSelectBox">
+                      <span class="outlined-select-label">Condición de Pago <span class="req">*</span></span>
+                      <input class="outlined-select-input" id="condPagoSearchInp" placeholder="Seleccionar..."
+                        autocomplete="off" value="CONTADO" readonly>
+                      <span class="outlined-select-arrow"><i data-lucide="chevron-down"
+                          style="width: 16px; height: 16px;"></i></span>
+                    </div>
+                    <div class="outlined-dropdown-list" id="condPagoDropdownList">
+                      <!-- Will be rendered dynamically: CONTADO, CRÉDITO -->
+                    </div>
+                    <input type="hidden" id="condPagoVal" value="contado">
+                  </div>
+                </div>
+
+                <!-- Días de Crédito (Input numérico) -->
+                <div class="field" id="creditDaysField" style="display: none;">
+                  <div class="outlined-select-container" id="creditDaysContainer">
+                    <div class="outlined-select-box" id="creditDaysSelectBox">
+                      <span class="outlined-select-label">Días de Crédito</span>
+                      <input class="outlined-select-input" id="creditDaysInp" type="number" min="0" value="30"
+                        style="cursor: text;">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fecha de Vencimiento (Solo visible si es Crédito) -->
+                <div class="field" id="dueDateField" style="display: none;">
+                  <div class="outlined-select-container" id="dueDateContainer">
+                    <div class="outlined-select-box" id="dueDateSelectBox">
+                      <span class="outlined-select-label">Fecha de Vencimiento <span class="req">*</span></span>
+                      <input class="outlined-select-input" id="dueDateInp" type="date" style="cursor: text;">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Deducciones por Retenciones (tabla compacta) -->
+            <div class="card"
+              style="background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-bottom:20px; box-shadow:var(--shadow-sm); overflow: hidden;">
+              <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--line-2); padding-bottom:12px; flex-wrap:wrap; gap:8px;">
+                <strong
+                  style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; color:#0f172a; text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; gap:6px;">
+                  <i data-lucide="percent" style="width:14px; height:14px; color:var(--sae);"></i> Deducciones por
+                  Retenciones
+                </strong>
+                <span style="font-size:11px; color:var(--muted); font-weight:500;">Montos retenidos que se descuentan
+                  del
+                  total a pagar.</span>
+              </div>
+              <table style="width:100%; min-width:0; border-collapse:collapse;">
+                <thead>
+                  <tr>
+                    <th style="text-align:center;">Estatus</th>
+                    <th>Retención</th>
+                    <th>Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="retIvaCard">
+                    <td style="padding:10px 14px; text-align:center;">
+                      <span class="status-pill-select collected" id="ivaStatusWrap" data-status="collected">
+                        <select id="ivaStatusBtn" aria-label="Estatus de retención IVA">
+                          <option value="pending">Por Cobrar</option>
+                          <option value="collected" selected>Cobrado</option>
+                        </select>
+                      </span>
+                    </td>
+                    <td style="padding:10px 14px; font-size:12px; font-weight:600; color:#334155;">Retención IVA (75%)
+                    </td>
+                    <td
+                      style="padding:10px 14px; font-size:13px; font-weight:800; color:#0f172a; font-variant-numeric:tabular-nums;"
+                      id="modalIvaRetText">24.000,00 Bs</td>
+                  </tr>
+                  <tr id="retIslrCard">
+                    <td style="padding:10px 14px; text-align:center;">
+                      <span class="status-pill-select collected" id="islrStatusWrap" data-status="collected">
+                        <select id="islrStatusBtn" aria-label="Estatus de retención ISLR">
+                          <option value="pending">Por Cobrar</option>
+                          <option value="collected" selected>Cobrado</option>
+                        </select>
+                      </span>
+                    </td>
+                    <td style="padding:10px 14px; font-size:12px; font-weight:600; color:#334155;">Retención ISLR</td>
+                    <td
+                      style="padding:10px 14px; font-size:13px; font-weight:800; color:#0f172a; font-variant-numeric:tabular-nums;"
+                      id="modalIslrRetText">6.000,00 Bs</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Sección de Registro de Pagos (Diseño de Tarjeta con Título y Subtítulo) -->
+            <div class="card"
+              style="background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-bottom:20px; box-shadow:var(--shadow-sm);">
+              <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--line-2); padding-bottom:12px; flex-wrap:wrap; gap:8px;">
+                <strong
+                  style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; color:#0f172a; text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; gap:6px;">
+                  <i data-lucide="wallet" style="width:14px; height:14px; color:var(--sae);"></i> Registro de Pagos
+                </strong>
+                <span style="font-size:11px; color:var(--muted); font-weight:500;">Registre y distribuya los medios de
+                  pago
+                  para saldar el total de la compra.</span>
+              </div>
+
+              <!-- Estado vacío -->
+              <div class="empty-state" id="paymentEmpty" style="margin-top:0">
+                <div>
+                  <div class="empty-title">Aún no has registrado pagos</div>
+                  <div class="help">Haz clic en “Agregar pago” para registrar el primer medio de pago y distribuir el
+                    monto
+                    de la compra.</div>
+                </div>
+                <button class="btn btn-primary" id="openPayment"><i data-lucide="plus"></i> Agregar pago</button>
+              </div>
+
+              <!-- Tabla de pagos registrados -->
+              <div id="paymentArea" class="hidden">
+                <div class="toolbar" style="margin-bottom: 12px; padding: 0;">
+                  <div>
+                    <strong style="font-size:13px; color:#0f172a;">Pagos registrados</strong>
+                    <div class="help" style="display:flex;align-items:center;gap:8px">
+                      <span>Puede registrar múltiples medios de pago.</span>
+                      <button id="restoreRetentionsBtn"
+                        style="display:none;font-size:11px;font-weight:700;color:var(--sae);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;">Restablecer
+                        retenciones</button>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <button class="btn btn-primary" id="openPayment2"><i data-lucide="plus"></i> Agregar pago</button>
+                    <button class="btn btn-danger" id="deleteSelectedPaymentsBtn" title="Eliminar seleccionados"
+                      style="padding:0;width:40px;height:40px;justify-content:center"><i
+                        data-lucide="trash-2"></i></button>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table style="min-width:820px">
+                    <thead>
+                      <tr>
+                        <th style="width:50px;text-align:center"><input type="checkbox" id="selectAllPayments"
+                            class="chk">
+                        </th>
+                        <th>Medio de Pago</th>
+                        <th>Monto Divisa</th>
+                        <th>Monto (Bs)</th>
+                        <th>Nro. Doc.</th>
+                        <th>Fecha Doc.</th>
+                      </tr>
+                    </thead>
+                    <tbody id="paymentBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Panel de totales (derecha sticky) -->
+          <div style="position:sticky; top:0;">
+            <aside class="summary-panel"
+              style="background:#fff; border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-sm); overflow:hidden;">
+              <div style="padding:10px 16px; background:#f8fafc; border-bottom:1px solid var(--line);">
+                <h5 class="summary-sec-title" style="margin:0;">TOTALES</h5>
+              </div>
+              <div style="padding:12px 16px; display:flex; flex-direction:column; gap:0;">
+
+                <!-- Total Factura -->
+                <div class="payable-block" style="flex-direction:column;align-items:stretch;gap:4px">
+                  <div class="payable-label" style="font-size:13px;font-weight:700;white-space:nowrap;">Total Factura
+                  </div>
+                  <div class="payable-val" id="modalInvoiceTotal"
+                    style="font-size:20px;font-weight:800;white-space:nowrap;">232.000,00 Bs</div>
+                </div>
+
+                <!-- IGTF (monto se activa con Efectivo/Divisas/Zelle en moneda distinta a Bs) -->
+                <div id="modalIgtfSection">
+                  <div class="summary-divider"></div>
+                  <div class="summary-sec">
+                    <div class="summary-row"><span>Total IGTF (3%):</span><strong id="modalIgtfAmount">0,00 Bs</strong>
+                    </div>
+                    <div class="summary-row"><span>Total Factura + IGTF:</span><strong
+                        id="modalInvoicePlusIgtf">232.000,00 Bs</strong></div>
+                  </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Retenciones -->
+                <div class="summary-sec">
+                  <div class="summary-row">
+                    <span>Retención IVA (75%)</span>
+                    <strong id="modalIvaRetDisplay" class="negative">− 24.000,00 Bs</strong>
+                  </div>
+                  <div class="summary-row">
+                    <span>Retención ISLR</span>
+                    <strong id="modalIslrRetDisplay" class="negative">− 6.000,00 Bs</strong>
+                  </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Total a Pagar -->
+                <div class="payable-block" style="flex-direction:column;align-items:stretch;gap:4px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div class="payable-label" style="font-size:13px;font-weight:700;">Total a Pagar</div>
+                    <div class="payable-val" id="modalPayable" style="font-size:20px;font-weight:800;">202.000,00 Bs
+                    </div>
+                  </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Pagado / Saldo -->
+                <div class="balance-block pending" id="modalBalanceBlock">
+                  <div class="summary-row"><span>Total Pagado</span><strong id="modalPaidTotal"
+                      style="font-variant-numeric:tabular-nums;">0,00 Bs</strong></div>
+                  <div class="balance-row" style="flex-direction:column;align-items:stretch;gap:4px">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                      <span class="balance-label" id="modalBalanceLabel">Saldo Pendiente</span>
+                      <span class="balance-val" id="modalBalance" style="font-variant-numeric:tabular-nums;">202.000,00
+                        Bs</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </aside>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="foot"
+        style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-top:1px solid var(--line); background:#f8fafc;">
+        <button class="btn" id="backToPurchaseBtn"><i data-lucide="arrow-left"></i> Volver a la compra</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-soft" id="omitPaymentBtn" style="color:var(--muted); border-color:var(--line);"><i
+              data-lucide="ban"></i> Omitir completar pago</button>
+          <button class="btn btn-primary" id="registerBtn"><i data-lucide="check"></i> Registrar compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="payment-dialog-backdrop" id="providerModalBackdrop" style="display:none">
+    <div class="payment-dialog" style="max-width: 460px;">
+      <div class="head">
+        <div style="display:flex;align-items:center;gap:10px">
+          <i data-lucide="plus-circle" style="color:var(--sae);width:20px;height:20px"></i>
+          <strong>Nuevo Proveedor</strong>
+        </div>
+        <button class="icon-btn" id="closeProviderModal" title="Cerrar"><i data-lucide="x"></i></button>
+      </div>
+      <div class="body" style="padding: 20px; display:flex; flex-direction:column; gap:14px; background:#fff;">
+        <div class="field">
+          <label>Nombre / Razón Social <span class="req">*</span></label>
+          <input class="control" id="newProviderName" placeholder="Ej. INVERSIONES TECNOLÓGICAS, C.A.">
+        </div>
+        <div class="field">
+          <label>RIF <span class="req">*</span></label>
+          <input class="control" id="newProviderRif" placeholder="Ej. J-12345678-9">
+        </div>
+        <div class="field">
+          <label>Teléfono</label>
+          <input class="control" id="newProviderPhone" placeholder="Ej. 0212-5555555">
+        </div>
+        <div class="field">
+          <label>Dirección</label>
+          <input class="control" id="newProviderAddress" placeholder="Ej. Av. Francisco de Miranda, Caracas">
+        </div>
+      </div>
+      <div class="foot"
+        style="justify-content: flex-end; gap: 8px; background:#f8fafc; border-top: 1px solid var(--line); padding: 12px 20px;">
+        <button class="btn" id="cancelProviderModal"
+          style="background:#f1f5f9; border:none; color:#475569;">Cancelar</button>
+        <button class="btn btn-primary" id="saveProviderBtn"><i data-lucide="save"></i> Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="payment-dialog-backdrop" id="productModalBackdrop" style="display:none">
+    <div class="payment-dialog" style="max-width: 500px;">
+      <div class="head">
+        <div style="display:flex;align-items:center;gap:10px">
+          <i data-lucide="folder" style="color:var(--sae);width:20px;height:20px"></i>
+          <strong>Lista de Productos</strong>
+        </div>
+        <button class="icon-btn" id="closeProductModal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="body">
+        <div class="field" style="margin-bottom: 16px;">
+          <label>Buscar:</label>
+          <input class="control" id="productSearchInp" placeholder="Escriba para buscar concepto...">
+        </div>
+        <div class="product-list-container" id="productSearchList"
+          style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px; background: #fff;">
+          <!-- Dynamically rendered items -->
+        </div>
+      </div>
+      <div class="foot" style="justify-content: flex-end;">
+        <button class="btn" id="cancelProductModal"
+          style="border-radius: 999px; padding: 0 24px; background: #f1f5f9; border: none; color: #475569;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    const bs = n => new Intl.NumberFormat('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(n) || 0) + ' Bs';
+    const num = n => Number(n) || 0;
+    const itemsBody = document.getElementById('itemsBody');
+    const paymentBody = document.getElementById('paymentBody');
+    let currentPayable = 0;
+    let currentInvoice = 0;
+    let currentIvaRetention = 0;
+    let currentIslrRetention = 0;
+    let payments = [];
+    let zoom = 1;
+    let excludeRetentionPay = { iva: false, islr: false };
+
+    function toggleSwitch(btn) { btn.classList.toggle('on') }
+    document.getElementById('physical').onclick = e => toggleSwitch(e.currentTarget);
+
+    const multiRet = document.getElementById('multiRet');
+    multiRet.onclick = e => {
+      toggleSwitch(e.currentTarget);
+      const show = e.currentTarget.classList.contains('on');
+      document.querySelectorAll('.ret-col').forEach(el => el.classList.toggle('hidden-col', !show));
+
+      const globalIslrContainer = document.getElementById('globalIslrContainer');
+      if (globalIslrContainer) {
+        globalIslrContainer.style.display = show ? 'none' : 'block';
+      }
+
+      excludeRetentionPay = { iva: false, islr: false };
+      updateRestoreRetentionsBtnVisibility();
+
+      calculate();
+    };
+
+    let currentCondition = 'contado';
+
+    function setCondition(val) {
+      currentCondition = val.toLowerCase();
+
+      const condSearch = document.getElementById('condPagoSearchInp');
+      const condVal = document.getElementById('condPagoVal');
+      if (condSearch && condVal) {
+        condSearch.value = val.toUpperCase();
+        condVal.value = currentCondition;
+      }
+
+      const creditDaysField = document.getElementById('creditDaysField');
+      const dueDateField = document.getElementById('dueDateField');
+
+      if (currentCondition === 'credito') {
+        if (creditDaysField) creditDaysField.style.display = 'block';
+        if (dueDateField) dueDateField.style.display = 'block';
+        updateDueDateFromDays();
+      } else {
+        if (creditDaysField) creditDaysField.style.display = 'none';
+        if (dueDateField) dueDateField.style.display = 'none';
+      }
+
+      calculatePayments();
+      updateTabChecks();
+    }
+
+    function updateDueDateFromDays() {
+      const docDateVal = document.getElementById('docDate').value;
+      const creditDaysInp = document.getElementById('creditDaysInp');
+      const dueDateInp = document.getElementById('dueDateInp');
+
+      if (!dueDateInp || !creditDaysInp) return;
+      if (!docDateVal) {
+        dueDateInp.value = '';
+        return;
+      }
+
+      const days = parseInt(creditDaysInp.value) || 0;
+
+      const parts = docDateVal.split('-');
+      if (parts.length !== 3) return;
+      const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      if (isNaN(date.getTime())) return;
+
+      date.setDate(date.getDate() + days);
+
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      dueDateInp.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function updateDaysFromDueDate() {
+      const docDateVal = document.getElementById('docDate').value;
+      const dueDateVal = document.getElementById('dueDateInp').value;
+      const creditDaysInp = document.getElementById('creditDaysInp');
+
+      if (!dueDateVal || !docDateVal || !creditDaysInp) return;
+
+      const docParts = docDateVal.split('-');
+      const dueParts = dueDateVal.split('-');
+      if (docParts.length !== 3 || dueParts.length !== 3) return;
+
+      const docDate = new Date(parseInt(docParts[0]), parseInt(docParts[1]) - 1, parseInt(docParts[2]));
+      const dueDate = new Date(parseInt(dueParts[0]), parseInt(dueParts[1]) - 1, parseInt(dueParts[2]));
+
+      if (isNaN(docDate.getTime()) || isNaN(dueDate.getTime())) return;
+
+      const diffTime = dueDate.getTime() - docDate.getTime();
+      const diffDays = Math.max(0, Math.round(diffTime / (1000 * 60 * 60 * 24)));
+
+      creditDaysInp.value = diffDays;
+    }
+
+    function setPreview(open) {
+      document.getElementById('bodyLayout').classList.toggle('preview-open', open);
+    }
+    document.getElementById('togglePreviewTop').onclick = () => setPreview(true);
+    document.getElementById('attachBtn').onclick = () => setPreview(true);
+    document.getElementById('collapsePreview').onclick = () => setPreview(false);
+    document.getElementById('zoomIn').onclick = () => { zoom = Math.min(1.35, zoom + .1); document.getElementById('previewPage').style.transform = `scale(${zoom})`; document.getElementById('previewPage').style.transformOrigin = 'top center' };
+    document.getElementById('zoomOut').onclick = () => { zoom = Math.max(.75, zoom - .1); document.getElementById('previewPage').style.transform = `scale(${zoom})`; document.getElementById('previewPage').style.transformOrigin = 'top center' };
+
+    document.getElementById('docType').onchange = e => {
+      const note = e.target.value !== 'Factura';
+      document.getElementById('serieField').classList.toggle('hidden', note);
+      document.getElementById('affectedBlock').classList.toggle('hidden', !note);
+    };
+    function findAffected() {
+      const inp = document.getElementById('affectedNumber');
+      if (!inp.value) inp.value = '00133473';
+      document.getElementById('docFound').classList.remove('hidden');
+    }
+    document.getElementById('searchAffected').onclick = findAffected;
+    document.getElementById('searchAffected2').onclick = findAffected;
+
+    function lineHTML(rate = 16, label = 'Nuevo concepto', price = 0, ret = 0) {
+      return `<tr>
+    <td style="text-align:center"><input type="checkbox" class="chk row-select-chk"></td>
+    <td><input class="cell desc" value="${label}"></td>
+    <td><input class="cell qty" type="number" min="0" step="1" value="1"></td>
+    <td><input class="cell price" type="number" min="0" step="0.01" value="${price}"></td>
+    <td><select class="cell rate">
+      <option value="0" ${rate == 0 ? 'selected' : ''}>0%</option>
+      <option value="8" ${rate == 8 ? 'selected' : ''}>8%</option>
+      <option value="16" ${rate == 16 ? 'selected' : ''}>16%</option>
+      <option value="31" ${rate == 31 ? 'selected' : ''}>31%</option>
+    </select></td>
+    <td class="money lineTotal">${bs(price)}</td>
+    <td style="text-align:center"><input class="chk exempt" type="checkbox" ${rate == 0 ? 'checked' : ''}></td>
+    <td class="ret-col ${multiRet.classList.contains('on') ? '' : 'hidden-col'}"><select class="cell retention">
+      <option value="0" ${ret == 0 ? 'selected' : ''}>Sin retención</option>
+      <option value="3" ${ret == 3 ? 'selected' : ''}>004 - Honorarios profesionales - 3%</option>
+      <option value="2" ${ret == 2 ? 'selected' : ''}>005 - Servicios técnicos - 2%</option>
+      <option value="5" ${ret == 5 ? 'selected' : ''}>051 - Porcentaje - 5%</option>
+    </select></td>
+  </tr>`;
+    }
+    document.getElementById('addLine').onclick = () => openProductSelection();
+    document.getElementById('addFirstLine').onclick = () => openProductSelection();
+    itemsBody.addEventListener('input', calculate);
+    itemsBody.addEventListener('change', calculate);
+
+    // Handle row checkbox and Select All logic
+    const selectAllRows = document.getElementById('selectAllRows');
+    if (selectAllRows) {
+      selectAllRows.onclick = () => {
+        document.querySelectorAll('.row-select-chk').forEach(c => c.checked = selectAllRows.checked);
+      };
+    }
+    itemsBody.addEventListener('change', e => {
+      if (e.target.classList.contains('row-select-chk')) {
+        const chks = [...document.querySelectorAll('.row-select-chk')];
+        if (selectAllRows) selectAllRows.checked = chks.length > 0 && chks.every(c => c.checked);
+      }
+    });
+
+    // Handle centralized batch delete action
+    document.getElementById('deleteSelectedBtn').onclick = () => {
+      const selected = [...itemsBody.querySelectorAll('.row-select-chk:checked')];
+      if (selected.length === 0) {
+        alert('Seleccione al menos un concepto para eliminar.');
+        return;
+      }
+      if (confirm(`¿Está seguro de que desea eliminar los ${selected.length} conceptos seleccionados?`)) {
+        selected.forEach(chk => {
+          chk.closest('tr').remove();
+        });
+        if (selectAllRows) selectAllRows.checked = false;
+        calculate();
+      }
+    };
+
+    function syncRetentionsInPaymentTable(ivaRet, islrRet) {
+      // Remover filas de retención de la tabla de pagos si existieran
+      const ivaRow = paymentBody.querySelector('.row-ret-iva');
+      if (ivaRow) ivaRow.remove();
+      const islrRow = paymentBody.querySelector('.row-ret-islr');
+      if (islrRow) islrRow.remove();
+
+      // Sincronizar tarjeta de Retención IVA
+      const modalIvaRetText = document.getElementById('modalIvaRetText');
+      const retIvaCard = document.getElementById('retIvaCard');
+      const toggleIvaRetBtn = document.getElementById('toggleIvaRetBtn');
+      const toggleIvaLabel = document.getElementById('toggleIvaLabel');
+
+      if (modalIvaRetText && retIvaCard && toggleIvaRetBtn && toggleIvaLabel) {
+        const isExcluded = excludeRetentionPay.iva;
+        toggleIvaRetBtn.classList.toggle('on', !isExcluded);
+        retIvaCard.style.opacity = isExcluded ? '0.6' : '1';
+        retIvaCard.style.background = isExcluded ? '#f1f5f9' : '#fff';
+        toggleIvaLabel.textContent = isExcluded ? 'Excluida' : 'Aplicada';
+        toggleIvaLabel.style.color = isExcluded ? 'var(--danger)' : 'var(--success)';
+
+        if (isExcluded) {
+          modalIvaRetText.innerHTML = `<span style="text-decoration: line-through; color: var(--muted); font-size:14px;">${bs(ivaRet)}</span> <span style="font-size:9px; font-weight:700; color:var(--danger); padding:1px 5px; background:var(--danger-soft); border-radius:4px; margin-left:4px; letter-spacing:0.02em;">EXCLUIDO</span>`;
+        } else {
+          modalIvaRetText.textContent = bs(ivaRet);
+        }
+      }
+
+      // Sincronizar tarjeta de Retención ISLR
+      const modalIslrRetText = document.getElementById('modalIslrRetText');
+      const retIslrCard = document.getElementById('retIslrCard');
+      const toggleIslrRetBtn = document.getElementById('toggleIslrRetBtn');
+      const toggleIslrLabel = document.getElementById('toggleIslrLabel');
+
+      if (modalIslrRetText && retIslrCard && toggleIslrRetBtn && toggleIslrLabel) {
+        const isExcluded = excludeRetentionPay.islr;
+        toggleIslrRetBtn.classList.toggle('on', !isExcluded);
+        retIslrCard.style.opacity = isExcluded ? '0.6' : '1';
+        retIslrCard.style.background = isExcluded ? '#f1f5f9' : '#fff';
+        toggleIslrLabel.textContent = isExcluded ? 'Excluida' : 'Aplicada';
+        toggleIslrLabel.style.color = isExcluded ? 'var(--danger)' : 'var(--success)';
+
+        if (isExcluded) {
+          modalIslrRetText.innerHTML = `<span style="text-decoration: line-through; color: var(--muted); font-size:14px;">${bs(islrRet)}</span> <span style="font-size:9px; font-weight:700; color:var(--danger); padding:1px 5px; background:var(--danger-soft); border-radius:4px; margin-left:4px; letter-spacing:0.02em;">EXCLUIDO</span>`;
+        } else {
+          modalIslrRetText.textContent = bs(islrRet);
+        }
+      }
+    }
+
+    function calculate() {
+      const rows = [...itemsBody.querySelectorAll('tr')];
+
+      const compraEmpty = document.getElementById('compraEmpty');
+      const compraArea = document.getElementById('compraArea');
+      if (rows.length === 0) {
+        if (compraArea) compraArea.style.display = 'none';
+        if (compraEmpty) compraEmpty.style.display = 'flex';
+      } else {
+        if (compraArea) compraArea.style.display = 'block';
+        if (compraEmpty) compraEmpty.style.display = 'none';
+      }
+
+      let subtotal = 0, exempt = 0, taxable = { 8: 0, 16: 0, 31: 0 }, iva = { 8: 0, 16: 0, 31: 0 }, islr = 0;
+      const globalSelect = document.getElementById('globalIslrSelect');
+      const globalRetRate = (!multiRet.classList.contains('on') && globalSelect) ? num(globalSelect.value) : 0;
+      rows.forEach(tr => {
+        const q = num(tr.querySelector('.qty').value);
+        const p = num(tr.querySelector('.price').value);
+        const total = q * p;
+        const rate = num(tr.querySelector('.rate').value);
+        const ex = tr.querySelector('.exempt').checked || rate === 0;
+        const retSel = tr.querySelector('.retention');
+
+        let retRate = 0;
+        if (multiRet.classList.contains('on')) {
+          retRate = retSel ? num(retSel.value) : 0;
+        } else {
+          retRate = ex ? 0 : globalRetRate;
+        }
+
+        tr.querySelector('.lineTotal').textContent = bs(total);
+        subtotal += total;
+        if (ex) { exempt += total } else if (taxable[rate] !== undefined) {
+          taxable[rate] += total; iva[rate] += total * rate / 100;
+        }
+        if (retRate > 0) islr += total * retRate / 100;
+      });
+
+      const ivaTotal = Object.values(iva).reduce((a, b) => a + b, 0);
+      const invoice = subtotal + ivaTotal;
+      const ivaRetention = ivaTotal * 0.75;
+      currentInvoice = invoice;
+      currentIvaRetention = ivaRetention;
+      currentIslrRetention = islr;
+
+      // Una retención "Por Cobrar" aún no se ha aplicado, por lo que no descuenta del total a pagar
+      const ivaCollected = document.getElementById('ivaStatusBtn')?.value === 'collected';
+      const islrCollected = document.getElementById('islrStatusBtn')?.value === 'collected';
+      currentPayable = Math.max(0, invoice - (ivaCollected ? ivaRetention : 0) - (islrCollected ? islr : 0));
+      syncRetentionsInPaymentTable(ivaRetention, islr);
+
+      const subtotalEl = document.getElementById('subtotal');
+      if (subtotalEl) subtotalEl.textContent = bs(subtotal);
+      const exemptTotalEl = document.getElementById('exemptTotal');
+      if (exemptTotalEl) exemptTotalEl.textContent = bs(exempt);
+      document.getElementById('invoiceTotal').textContent = bs(invoice);
+      const ivaRetTotalEl = document.getElementById('ivaRetTotal');
+      ivaRetTotalEl.textContent = (ivaCollected ? '− ' : '+ ') + bs(ivaRetention);
+
+      const islrRetTotalEl = document.getElementById('islrRetTotal');
+      islrRetTotalEl.textContent = (islrCollected ? '− ' : '+ ') + bs(islr);
+      ['payable', 'payable2', 'footerPayable', 'headerPayable'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.textContent = bs(currentPayable);
+      });
+      const igtfInvoiceEl = document.getElementById('igtfInvoice');
+      if (igtfInvoiceEl) igtfInvoiceEl.textContent = bs(invoice);
+
+
+
+      const refCurr = document.getElementById('refCurrency').value;
+      const refRate = parseFloat(document.getElementById('refRate').value) || 1;
+      const refPayableEl = document.getElementById('refPayable');
+      if (refPayableEl) refPayableEl.textContent = bs(currentPayable / refRate) + ' ' + refCurr;
+
+      // Actualizar desgloses de popovers informativos
+      const popSubtotal = document.getElementById('popSubtotal');
+      if (popSubtotal) popSubtotal.textContent = bs(subtotal - exempt);
+      const popIva = document.getElementById('popIva');
+      if (popIva) popIva.textContent = bs(ivaTotal);
+      const popExempt = document.getElementById('popExempt');
+      if (popExempt) popExempt.textContent = bs(exempt);
+      const popTotal = document.getElementById('popTotal');
+      if (popTotal) popTotal.textContent = bs(invoice);
+
+      const popIvaBase = document.getElementById('popIvaBase');
+      if (popIvaBase) popIvaBase.textContent = bs(ivaTotal);
+      const popIvaRet = document.getElementById('popIvaRet');
+      if (popIvaRet) popIvaRet.textContent = bs(ivaRetention);
+
+      const popIslrBase = document.getElementById('popIslrBase');
+      if (popIslrBase) popIslrBase.textContent = bs(subtotal - exempt);
+
+      const popIslrRate = document.getElementById('popIslrRate');
+      if (popIslrRate) {
+        if (multiRet.classList.contains('on')) {
+          popIslrRate.textContent = 'Múltiple';
+        } else {
+          popIslrRate.textContent = globalRetRate > 0 ? `${globalRetRate}%` : '0%';
+        }
+      }
+      const popIslrRet = document.getElementById('popIslrRet');
+      if (popIslrRet) popIslrRet.textContent = bs(islr);
+
+      calculatePayments();
+      updateTabChecks();
+    }
+
+    function calculatePayments() {
+      const rows = [...paymentBody.querySelectorAll('tr')];
+
+      const hasPayments = rows.length > 0;
+      const paymentEmpty = document.getElementById('paymentEmpty');
+      const paymentArea = document.getElementById('paymentArea');
+      if (paymentEmpty) paymentEmpty.style.display = hasPayments ? 'none' : 'flex';
+      if (paymentArea) {
+        if (hasPayments) {
+          paymentArea.classList.remove('hidden');
+        } else {
+          paymentArea.classList.add('hidden');
+        }
+      }
+
+      let paid = 0, igtf = 0;
+      rows.forEach(tr => {
+        const methodEl = tr.querySelector('.pay-method');
+        const cashCurrencyEl = tr.querySelector('.pay-cash-currency');
+        const foreignEl = tr.querySelector('.pay-foreign');
+        const bsEl = tr.querySelector('.pay-bs');
+        const isCashForeign = methodEl && methodEl.value === 'Efectivo' && cashCurrencyEl && cashCurrencyEl.value === 'Divisa';
+        const isIgtf = (methodEl && (methodEl.value === 'Divisas' || methodEl.value === 'Zelle')) || isCashForeign;
+
+        const foreign = foreignEl ? num(foreignEl.value) : 0;
+        const bsVal = bsEl ? num(bsEl.value) : 0;
+
+        paid += bsVal;
+
+        const igtfTag = tr.querySelector('.pay-igtf-tag');
+        if (isIgtf) {
+          igtf += bsVal * 0.03;
+          if (igtfTag) igtfTag.classList.remove('hidden');
+        } else {
+          if (igtfTag) igtfTag.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('paidTotal').textContent = bs(paid);
+      document.getElementById('igtfAmount').textContent = bs(igtf);
+      document.getElementById('invoicePlusIgtf').textContent = bs(currentInvoice + igtf);
+
+      const balance = currentInvoice - paid;
+      ['balance', 'footerBalance', 'headerBalance'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.textContent = bs(balance);
+      });
+
+      // Sincronizar totales en la modal
+      const modalPayable = document.getElementById('modalPayable');
+      if (modalPayable) modalPayable.textContent = bs(currentPayable);
+
+      const modalInvoiceTotal = document.getElementById('modalInvoiceTotal');
+      if (modalInvoiceTotal) modalInvoiceTotal.textContent = bs(currentInvoice);
+
+      const modalIgtfAmount = document.getElementById('modalIgtfAmount');
+      if (modalIgtfAmount) modalIgtfAmount.textContent = bs(igtf);
+      const modalInvoicePlusIgtf = document.getElementById('modalInvoicePlusIgtf');
+      if (modalInvoicePlusIgtf) modalInvoicePlusIgtf.textContent = bs(currentInvoice + igtf);
+
+      const ivaCollected = document.getElementById('ivaStatusBtn')?.value === 'collected';
+      const islrCollected = document.getElementById('islrStatusBtn')?.value === 'collected';
+
+      const modalIvaRetDisplay = document.getElementById('modalIvaRetDisplay');
+      if (modalIvaRetDisplay) modalIvaRetDisplay.textContent = (ivaCollected ? '− ' : '+ ') + bs(currentIvaRetention);
+
+      const modalIslrRetDisplay = document.getElementById('modalIslrRetDisplay');
+      if (modalIslrRetDisplay) modalIslrRetDisplay.textContent = (islrCollected ? '− ' : '+ ') + bs(currentIslrRetention);
+
+      const modalPaidTotal = document.getElementById('modalPaidTotal');
+      if (modalPaidTotal) modalPaidTotal.textContent = bs(paid);
+
+      const modalBalance = document.getElementById('modalBalance');
+      if (modalBalance) modalBalance.textContent = bs(balance);
+
+      const modalBalanceBlock = document.getElementById('modalBalanceBlock');
+      const modalBalanceLabel = document.getElementById('modalBalanceLabel');
+
+      const status = document.getElementById('payStatus');
+      const balanceBlock = document.getElementById('balanceBlock');
+      if (Math.abs(balance) < .01) {
+        status.textContent = 'Pagado completamente'; status.className = 'status paid';
+        if (balanceBlock) {
+          balanceBlock.className = 'balance-block paid';
+          const lbl = balanceBlock.querySelector('.balance-label');
+          if (lbl) lbl.textContent = 'Pagado';
+        }
+        if (modalBalanceBlock) {
+          modalBalanceBlock.className = 'balance-block paid';
+          modalBalanceBlock.style.background = 'var(--success-soft)';
+          modalBalanceBlock.style.borderColor = '#bbf7d0';
+        }
+        if (modalBalanceLabel) modalBalanceLabel.textContent = 'Pagado';
+      } else if (balance < 0) {
+        status.textContent = 'Monto excedido'; status.className = 'status over';
+        if (balanceBlock) {
+          balanceBlock.className = 'balance-block overpaid';
+          const lbl = balanceBlock.querySelector('.balance-label');
+          if (lbl) lbl.textContent = 'Monto Excedido';
+        }
+        if (modalBalanceBlock) {
+          modalBalanceBlock.className = 'balance-block overpaid';
+          modalBalanceBlock.style.background = 'var(--danger-soft)';
+          modalBalanceBlock.style.borderColor = '#fecaca';
+        }
+        if (modalBalanceLabel) modalBalanceLabel.textContent = 'Monto Excedido';
+      } else {
+        status.textContent = 'Por pagar'; status.className = 'status pending';
+        if (balanceBlock) {
+          balanceBlock.className = 'balance-block pending';
+          const lbl = balanceBlock.querySelector('.balance-label');
+          if (lbl) lbl.textContent = 'Por Pagar';
+        }
+        if (modalBalanceBlock) {
+          modalBalanceBlock.className = 'balance-block pending';
+          modalBalanceBlock.style.background = '#fff7ed';
+          modalBalanceBlock.style.borderColor = '#fed7aa';
+        }
+        if (modalBalanceLabel) modalBalanceLabel.textContent = 'Por Pagar';
+      }
+
+      const refCurr = document.getElementById('refCurrency').value;
+      const refRate = parseFloat(document.getElementById('refRate').value) || 1;
+      const refBalanceEl = document.getElementById('refBalance');
+      if (refBalanceEl) refBalanceEl.textContent = bs(balance / refRate) + ' ' + refCurr;
+
+      const receiptPaySec = document.getElementById('receiptPaymentSection');
+      if (receiptPaySec) receiptPaySec.style.display = hasPayments ? 'block' : 'none';
+      const receiptIgtfSec = document.getElementById('receiptIgtfSection');
+      if (receiptIgtfSec) receiptIgtfSec.style.display = igtf > 0 ? 'block' : 'none';
+
+      updateTabChecks();
+    }
+
+    function paymentLineHTML(method = 'Transferencia', foreign = 0, bsVal = 0, doc = '', date = '', cashCurrency = 'Bs') {
+      if (!date) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        date = yyyy + '-' + mm + '-' + dd;
+      }
+      const isCashForeign = method === 'Efectivo' && cashCurrency === 'Divisa';
+      const igtfApplies = method === 'Divisas' || method === 'Zelle' || isCashForeign;
+      return `<tr>
+        <td style="text-align:center"><input type="checkbox" class="chk row-pay-select-chk"></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px">
+            <select class="cell pay-method" style="min-width:150px">
+              <option value="Transferencia" ${method === 'Transferencia' ? 'selected' : ''}>Transferencia</option>
+              <option value="Pago móvil" ${method === 'Pago móvil' ? 'selected' : ''}>Pago móvil</option>
+              <option value="Efectivo" ${method === 'Efectivo' ? 'selected' : ''}>Efectivo</option>
+              <option value="Divisas" ${method === 'Divisas' ? 'selected' : ''}>Divisas</option>
+              <option value="Zelle" ${method === 'Zelle' ? 'selected' : ''}>Zelle</option>
+            </select>
+            <select class="cell pay-cash-currency ${method === 'Efectivo' ? '' : 'hidden'}" style="min-width:80px" title="Moneda del efectivo">
+              <option value="Bs" ${cashCurrency === 'Bs' ? 'selected' : ''}>Bs</option>
+              <option value="Divisa" ${cashCurrency === 'Divisa' ? 'selected' : ''}>Divisa</option>
+            </select>
+            <span class="tag pay-igtf-tag ${igtfApplies ? '' : 'hidden'}">IGTF</span>
+          </div>
+        </td>
+        <td><input class="cell pay-foreign" type="number" min="0" step="0.01" value="${foreign}"></td>
+        <td><input class="cell pay-bs" type="number" min="0" step="0.01" value="${bsVal}"></td>
+        <td><input class="cell pay-doc" value="${doc}" placeholder="Referencia"></td>
+        <td><input class="cell pay-date" type="date" value="${date}"></td>
+      </tr>`;
+    }
+
+    function addPaymentLine() {
+      const rows = [...paymentBody.querySelectorAll('tr')];
+      let paidSoFar = 0;
+      rows.forEach(tr => {
+        paidSoFar += num(tr.querySelector('.pay-bs').value);
+      });
+      const remainingPayable = Math.max(0, currentPayable - paidSoFar);
+
+      const refRate = parseFloat(document.getElementById('refRate').value) || 1;
+      const foreignVal = remainingPayable / refRate;
+
+      paymentBody.insertAdjacentHTML('beforeend', paymentLineHTML('Transferencia', foreignVal.toFixed(2), remainingPayable.toFixed(2)));
+      renderIcons();
+      calculatePayments();
+    }
+
+    document.getElementById('openPayment').onclick = addPaymentLine;
+    document.getElementById('openPayment2').onclick = addPaymentLine;
+
+
+
+    paymentBody.addEventListener('input', e => {
+      const tr = e.target.closest('tr');
+      if (!tr) return;
+      const refRate = parseFloat(document.getElementById('refRate').value) || 1;
+      if (e.target.classList.contains('pay-bs')) {
+        const foreignEl = tr.querySelector('.pay-foreign');
+        if (foreignEl) foreignEl.value = (num(e.target.value) / refRate).toFixed(2);
+      } else if (e.target.classList.contains('pay-foreign')) {
+        const bsEl = tr.querySelector('.pay-bs');
+        if (bsEl) bsEl.value = (num(e.target.value) * refRate).toFixed(2);
+      }
+      calculatePayments();
+    });
+
+    function updateRowIgtfTag(tr) {
+      if (!tr) return;
+      const method = tr.querySelector('.pay-method')?.value;
+      const cashCurrencyEl = tr.querySelector('.pay-cash-currency');
+      const isCashForeign = method === 'Efectivo' && cashCurrencyEl && cashCurrencyEl.value === 'Divisa';
+      const tag = tr.querySelector('.pay-igtf-tag');
+      if (tag) {
+        tag.classList.toggle('hidden', !(method === 'Divisas' || method === 'Zelle' || isCashForeign));
+      }
+    }
+
+    paymentBody.addEventListener('change', e => {
+      if (e.target.classList.contains('pay-method')) {
+        const tr = e.target.closest('tr');
+        if (tr) {
+          const method = e.target.value;
+          const cashCurrencyEl = tr.querySelector('.pay-cash-currency');
+          if (cashCurrencyEl) cashCurrencyEl.classList.toggle('hidden', method !== 'Efectivo');
+          updateRowIgtfTag(tr);
+        }
+      }
+      if (e.target.classList.contains('pay-cash-currency')) {
+        updateRowIgtfTag(e.target.closest('tr'));
+      }
+      if (e.target.classList.contains('row-pay-select-chk')) {
+        const selectAllPayments = document.getElementById('selectAllPayments');
+        const chks = [...document.querySelectorAll('.row-pay-select-chk')];
+        if (selectAllPayments) selectAllPayments.checked = chks.length > 0 && chks.every(c => c.checked);
+      }
+      calculatePayments();
+    });
+
+    // Handle payments select-all checkbox logic
+    const selectAllPayments = document.getElementById('selectAllPayments');
+    if (selectAllPayments) {
+      selectAllPayments.onclick = () => {
+        document.querySelectorAll('.row-pay-select-chk').forEach(c => c.checked = selectAllPayments.checked);
+      };
+    }
+
+    // Handle batch delete payments
+    const deleteSelectedPaymentsBtn = document.getElementById('deleteSelectedPaymentsBtn');
+    if (deleteSelectedPaymentsBtn) {
+      deleteSelectedPaymentsBtn.onclick = () => {
+        const selected = [...paymentBody.querySelectorAll('.row-pay-select-chk:checked')];
+        if (selected.length === 0) {
+          alert('Seleccione al menos un pago para eliminar.');
+          return;
+        }
+        if (confirm(`¿Está seguro de que desea eliminar los ${selected.length} pagos seleccionados?`)) {
+          selected.forEach(chk => {
+            const tr = chk.closest('tr');
+            if (tr.classList.contains('row-ret-iva')) {
+              excludeRetentionPay.iva = true;
+            } else if (tr.classList.contains('row-ret-islr')) {
+              excludeRetentionPay.islr = true;
+            }
+            tr.remove();
+          });
+          if (selectAllPayments) selectAllPayments.checked = false;
+          calculatePayments();
+          updateRestoreRetentionsBtnVisibility();
+        }
+      };
+    }
+
+    function validate() {
+      let ok = true;
+      const reqs = [
+        ['providerField', document.getElementById('provider').value],
+        ['expenseField', document.getElementById('expense').value],
+        ['dateField', document.getElementById('docDate').value],
+        ['numberField', document.getElementById('docNumber').value],
+        ['controlField', document.getElementById('controlNumber').value]
+      ];
+      reqs.forEach(([id, val]) => {
+        const el = document.getElementById(id); el.classList.toggle('invalid', !val); if (!val) ok = false;
+      });
+      if (document.getElementById('docType').value !== 'Factura') {
+        const val = document.getElementById('affectedNumber').value;
+        document.getElementById('affectedField').classList.toggle('invalid', !val);
+        if (!val) ok = false;
+      }
+      if (itemsBody.querySelectorAll('tr').length === 0) { alert('Debe registrar al menos un concepto o producto.'); ok = false }
+      return ok;
+    }
+    // Abrir modal de pagos desde el footer principal
+    document.getElementById('totalizeBtn').onclick = () => {
+      if (validate()) {
+        document.getElementById('paymentModalBackdrop').style.display = 'grid';
+        calculatePayments();
+        renderIcons();
+      }
+    };
+
+    // Funciones para cerrar modal de pagos
+    function closePaymentModal() {
+      document.getElementById('paymentModalBackdrop').style.display = 'none';
+    }
+    document.getElementById('closePaymentModal').onclick = closePaymentModal;
+    document.getElementById('backToPurchaseBtn').onclick = closePaymentModal;
+
+    const paymentModalBackdrop = document.getElementById('paymentModalBackdrop');
+    if (paymentModalBackdrop) {
+      paymentModalBackdrop.onclick = e => {
+        if (e.target === paymentModalBackdrop) closePaymentModal();
+      };
+    }
+
+    // Omitir completar pago y registrar compra
+    document.getElementById('omitPaymentBtn').onclick = () => {
+      // Remover pagos para dejar la tabla vacía
+      const rows = [...paymentBody.querySelectorAll('tr')];
+      rows.forEach(tr => {
+        tr.remove();
+      });
+      calculatePayments();
+
+      alert('Compra registrada exitosamente (pago omitido).');
+      closePaymentModal();
+      document.querySelector('.modal').style.display = 'none';
+      document.querySelector('.app-dim').style.display = 'none';
+    };
+
+    // Registrar compra con pagos completados/parciales
+    document.getElementById('registerBtn').onclick = () => {
+      if (validate()) {
+        const payRows = [...paymentBody.querySelectorAll('tr')];
+        const paid = payRows.reduce((sum, tr) => sum + num(tr.querySelector('.pay-bs').value), 0);
+        const balance = currentPayable - paid;
+
+        if (Math.abs(balance) > 0.01 && currentCondition !== 'credito') {
+          if (confirm(`Hay un saldo pendiente de ${bs(balance)}. ¿Desea registrar la compra de todas formas?`)) {
+            alert('Compra registrada exitosamente con saldo pendiente.');
+            closePaymentModal();
+            document.querySelector('.modal').style.display = 'none';
+            document.querySelector('.app-dim').style.display = 'none';
+          }
+        } else {
+          alert('Compra registrada exitosamente.');
+          closePaymentModal();
+          document.querySelector('.modal').style.display = 'none';
+          document.querySelector('.app-dim').style.display = 'none';
+        }
+      }
+    };
+
+    // Controladores para las filas de retenciones (clic en la fila alterna Aplicada de ambas al unísono)
+    const retIvaCard = document.getElementById('retIvaCard');
+    if (retIvaCard) {
+      retIvaCard.onclick = () => {
+        excludeRetentionPay.iva = !excludeRetentionPay.iva;
+        excludeRetentionPay.islr = excludeRetentionPay.iva; // Sincroniza ISLR con el nuevo estado de IVA
+        calculate();
+      };
+      retIvaCard.style.cursor = 'pointer';
+    }
+
+    const retIslrCard = document.getElementById('retIslrCard');
+    if (retIslrCard) {
+      retIslrCard.onclick = () => {
+        excludeRetentionPay.islr = !excludeRetentionPay.islr;
+        excludeRetentionPay.iva = excludeRetentionPay.islr; // Sincroniza IVA con el nuevo estado de ISLR
+        calculate();
+      };
+      retIslrCard.style.cursor = 'pointer';
+    }
+
+    // Estatus de cobro por retención (Por Cobrar / Cobrado), independiente de "Aplicada"
+    [['ivaStatusBtn', 'ivaStatusWrap'], ['islrStatusBtn', 'islrStatusWrap']].forEach(([selectId, wrapId]) => {
+      const select = document.getElementById(selectId);
+      const wrap = document.getElementById(wrapId);
+      if (!select || !wrap) return;
+      select.addEventListener('click', (e) => e.stopPropagation());
+      select.addEventListener('change', (e) => {
+        e.stopPropagation();
+        const nowCollected = select.value === 'collected';
+        wrap.dataset.status = nowCollected ? 'collected' : 'pending';
+        wrap.classList.toggle('collected', nowCollected);
+        wrap.classList.toggle('pending', !nowCollected);
+        calculate();
+      });
+    });
+
+
+
+
+
+    function updateTabChecks() {
+      // 1. Check Documento
+      const provider = document.getElementById('provider').value;
+      const expense = document.getElementById('expense').value;
+      const docDate = document.getElementById('docDate').value;
+      const docNumber = document.getElementById('docNumber').value;
+      const controlNumber = document.getElementById('controlNumber').value;
+      let docOk = provider && expense && docDate && docNumber && controlNumber;
+      if (document.getElementById('docType').value !== 'Factura') {
+        const affected = document.getElementById('affectedNumber').value;
+        if (!affected) docOk = false;
+      }
+      const docCheck = document.getElementById('docCheckBadge');
+      if (docCheck) docCheck.classList.toggle('visible', !!docOk);
+
+      // 2. Check Compra
+      const rows = [...itemsBody.querySelectorAll('tr')];
+      const compraOk = rows.length > 0 && rows.every(tr => {
+        const qty = parseFloat(tr.querySelector('.qty').value) || 0;
+        const price = parseFloat(tr.querySelector('.price').value) || 0;
+        return qty > 0 && price > 0;
+      });
+      const compraCheck = document.getElementById('compraCheckBadge');
+      if (compraCheck) compraCheck.classList.toggle('visible', !!compraOk);
+
+      // 3. Check Pago
+      const payRows = [...paymentBody.querySelectorAll('tr')];
+      const paid = payRows.reduce((sum, tr) => sum + num(tr.querySelector('.pay-bs').value), 0);
+      const balance = currentPayable - paid;
+      let pagoOk = false;
+      if (currentCondition === 'credito') {
+        pagoOk = true;
+      } else {
+        pagoOk = payRows.length > 0 && Math.abs(balance) < 0.01;
+      }
+      const pagoCheck = document.getElementById('pagoCheckBadge');
+      if (pagoCheck) pagoCheck.classList.toggle('visible', !!pagoOk);
+    }
+
+    // Bind input listeners for dynamic validation updates
+    ['provider', 'expense', 'docDate', 'docNumber', 'controlNumber', 'affectedNumber', 'docType'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', updateTabChecks);
+        el.addEventListener('change', updateTabChecks);
+      }
+    });
+
+    // Bind reference currency and rate listeners
+    ['refCurrency', 'refRate'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', calculate);
+        el.addEventListener('change', calculate);
+      }
+    });
+
+    // Switch the rate source label to "Personalizada" when the user edits the rate
+    const refRateInput = document.getElementById('refRate');
+    const refRateUpdatedEl = document.getElementById('refRateUpdated');
+    if (refRateInput && refRateUpdatedEl) {
+      const bcvRateHTML = refRateUpdatedEl.innerHTML;
+      const bcvRateValue = refRateInput.value;
+      refRateInput.addEventListener('input', () => {
+        refRateUpdatedEl.innerHTML = refRateInput.value === bcvRateValue
+          ? bcvRateHTML
+          : '<strong style="color:#7c3aed;font-weight:700">Personalizada</strong>';
+      });
+    }
+
+    function renderIcons() {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      } else {
+        const map = {
+          'receipt': '▤', 'file-text': '▣', 'x': '✕', 'search': '⌕',
+          'chevron-down': '▾', 'plus': '+', 'trash-2': '🗑', 'edit-2': '✏',
+          'check': '✓', 'ban': '⊘', 'save': '💾', 'paperclip': '📎',
+          'zoom-in': '＋', 'zoom-out': '－', 'arrow-left-to-line': '⇦',
+          'help-circle': '?', 'external-link': '↗', 'refresh-cw': '⟳',
+          'check-circle-2': '✓'
+        };
+        document.querySelectorAll('[data-lucide]').forEach(el => {
+          if (!el.textContent) {
+            const name = el.getAttribute('data-lucide');
+            if (map[name]) {
+              el.textContent = map[name];
+              el.style.fontStyle = 'normal';
+              el.style.fontWeight = 'bold';
+            }
+          }
+        });
+      }
+    }
+
+    // Bind offline fallback check on load
+    window.addEventListener('DOMContentLoaded', renderIcons);
+
+    const productsList = [
+      { label: 'Monto Gravable 1 - 16%', rate: 16 },
+      { label: 'Monto Servicios - 0%', rate: 0 },
+      { label: 'Monto Exento - 0%', rate: 0 },
+      { label: 'Monto Gravable 2 - 8%', rate: 8 },
+      { label: 'Monto Gravable 3 - 31%', rate: 31 },
+      { label: 'Monto Exento - Servicios - 0%', rate: 0 }
+    ];
+
+    const productModalBackdrop = document.getElementById('productModalBackdrop');
+    const productSearchInp = document.getElementById('productSearchInp');
+    const productSearchList = document.getElementById('productSearchList');
+
+    function openProductSelection() {
+      productModalBackdrop.style.display = 'grid';
+      productSearchInp.value = '';
+      renderProductList('');
+      setTimeout(() => productSearchInp.focus(), 50);
+    }
+
+    function closeProductSelection() {
+      productModalBackdrop.style.display = 'none';
+    }
+
+    function renderProductList(query) {
+      const normQuery = query.toLowerCase().trim();
+      let filtered = productsList.filter(p => p.label.toLowerCase().includes(normQuery));
+
+      let html = '';
+      filtered.forEach(p => {
+        html += `<div class="product-item" data-label="${p.label.replace(/"/g, '&quot;')}" data-rate="${p.rate}">${p.label}</div>`;
+      });
+
+      if (normQuery && !productsList.some(p => p.label.toLowerCase() === normQuery)) {
+        html += `<div class="product-item" style="color:var(--sae);background:var(--sae-soft);border:1px dashed rgba(37,99,235,0.2)" data-label="${query.replace(/"/g, '&quot;')}" data-rate="16">
+      <strong>+ Crear nuevo concepto:</strong> "${query}"
+    </div>`;
+      }
+
+      if (filtered.length === 0 && !normQuery) {
+        html = `<div style="padding:16px;text-align:center;color:#64748b;font-size:12px">No hay productos en la lista</div>`;
+      }
+
+      productSearchList.innerHTML = html;
+    }
+
+    function selectProduct(label, rate) {
+      closeProductSelection();
+      itemsBody.insertAdjacentHTML('beforeend', lineHTML(rate, label));
+      calculate();
+      renderIcons();
+
+      // Focus and select quantity input of new row
+      const lastRow = itemsBody.querySelector('tr:last-child');
+      if (lastRow) {
+        const qtyInp = lastRow.querySelector('.qty');
+        if (qtyInp) {
+          qtyInp.focus();
+          qtyInp.select();
+        }
+      }
+    }
+
+    // Bind delegation clicks on the list
+    productSearchList.onclick = e => {
+      const item = e.target.closest('.product-item');
+      if (item) {
+        const label = item.dataset.label;
+        const rate = parseFloat(item.dataset.rate) || 0;
+        selectProduct(label, rate);
+      }
+    };
+
+    document.getElementById('closeProductModal').onclick = closeProductSelection;
+    document.getElementById('cancelProductModal').onclick = closeProductSelection;
+    productModalBackdrop.onclick = e => {
+      if (e.target === productModalBackdrop) closeProductSelection();
+    };
+
+    productSearchInp.oninput = e => {
+      renderProductList(e.target.value);
+    };
+
+    const globalIslrSelect = document.getElementById('globalIslrSelect');
+    if (globalIslrSelect) {
+      globalIslrSelect.addEventListener('change', () => {
+        document.getElementById('globalIslrPercentText').textContent = `(%) Retención: ${globalIslrSelect.value}`;
+        excludeRetentionPay = { iva: false, islr: false };
+        updateRestoreRetentionsBtnVisibility();
+        calculate();
+      });
+    }
+    const globalIslrContainer = document.getElementById('globalIslrContainer');
+    if (globalIslrContainer) {
+      globalIslrContainer.style.display = multiRet.classList.contains('on') ? 'none' : 'block';
+    }
+
+    // Reset when provider changes
+    const providerEl = document.getElementById('provider');
+    if (providerEl) {
+      providerEl.addEventListener('change', () => {
+        excludeRetentionPay = { iva: false, islr: false };
+        updateRestoreRetentionsBtnVisibility();
+        calculate();
+      });
+    }
+
+    function updateRestoreRetentionsBtnVisibility() {
+      const btn = document.getElementById('restoreRetentionsBtn');
+      if (btn) {
+        const isExcluded = (excludeRetentionPay.iva || excludeRetentionPay.islr);
+        btn.style.display = isExcluded ? 'inline' : 'none';
+      }
+    }
+
+    const restoreRetentionsBtn = document.getElementById('restoreRetentionsBtn');
+    if (restoreRetentionsBtn) {
+      restoreRetentionsBtn.onclick = () => {
+        excludeRetentionPay = { iva: false, islr: false };
+        updateRestoreRetentionsBtnVisibility();
+        calculate();
+      };
+    }
+
+    // Lista de proveedores iniciales y lógica del selector outlined
+    let providerList = [
+      "CENTRO COMERCIAL COMERCIO, C.A."
+    ];
+
+    const providerContainer = document.getElementById('providerContainer');
+    const providerSearchInp = document.getElementById('providerSearchInp');
+    const providerDropdownList = document.getElementById('providerDropdownList');
+    const providerHiddenInput = document.getElementById('provider');
+
+    function renderProviderDropdown(query = '') {
+      const normQuery = query.toLowerCase().trim();
+      let html = '';
+
+      providerList.forEach(provider => {
+        if (normQuery && !provider.toLowerCase().includes(normQuery)) return;
+
+        html += `<div class="tree-item" data-value="${provider}" data-label="${provider}">
+          ${provider}
+        </div>`;
+      });
+
+      if (!html) {
+        html = `<div style="padding:12px; text-align:center; color:var(--muted); font-size:12px;">No se encontraron resultados</div>`;
+      }
+
+      providerDropdownList.innerHTML = html;
+    }
+
+    // Enfocar input y abrir dropdown
+    providerSearchInp.addEventListener('focus', () => {
+      providerContainer.classList.add('open');
+      renderProviderDropdown(providerSearchInp.value === "CENTRO COMERCIAL COMERCIO, C.A." ? "" : providerSearchInp.value);
+    });
+
+    // Buscar en tiempo real
+    providerSearchInp.addEventListener('input', (e) => {
+      providerContainer.classList.add('open');
+      renderProviderDropdown(e.target.value);
+    });
+
+    // Seleccionar proveedor
+    providerDropdownList.addEventListener('click', (e) => {
+      const item = e.target.closest('.tree-item');
+      if (item) {
+        const label = item.dataset.label;
+        providerSearchInp.value = label;
+        providerHiddenInput.value = label;
+        providerContainer.classList.remove('open');
+        updateTabChecks();
+
+        // Reiniciar retenciones y recalcular al cambiar de proveedor
+        excludeRetentionPay = { iva: false, islr: false };
+        updateRestoreRetentionsBtnVisibility();
+        calculate();
+      }
+    });
+
+    // Clic en la caja outlined (borde o chevron) enfoca el input
+    document.getElementById('providerSelectBox').onclick = (e) => {
+      if (e.target !== providerSearchInp) {
+        providerSearchInp.focus();
+      }
+    };
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!providerContainer.contains(e.target)) {
+        providerContainer.classList.remove('open');
+        // Si sale sin seleccionar y escribió algo inválido, restablecer al anterior
+        const val = providerHiddenInput.value;
+        if (providerSearchInp.value !== val) {
+          providerSearchInp.value = val;
+        }
+      }
+    });
+
+    // Renderizar inicialmente
+    renderProviderDropdown();
+
+    // Lógica para registrar nuevo proveedor desde la modal
+    const providerModalBackdrop = document.getElementById('providerModalBackdrop');
+    const openAddProviderBtn = document.getElementById('openAddProviderBtn');
+    const closeProviderModal = document.getElementById('closeProviderModal');
+    const cancelProviderModal = document.getElementById('cancelProviderModal');
+    const saveProviderBtn = document.getElementById('saveProviderBtn');
+
+    if (openAddProviderBtn) {
+      openAddProviderBtn.onclick = () => {
+        providerModalBackdrop.style.display = 'grid';
+        document.getElementById('newProviderName').value = '';
+        document.getElementById('newProviderRif').value = '';
+        document.getElementById('newProviderPhone').value = '';
+        document.getElementById('newProviderAddress').value = '';
+        setTimeout(() => document.getElementById('newProviderName').focus(), 50);
+      };
+    }
+
+    function closeProviderSelectionModal() {
+      providerModalBackdrop.style.display = 'none';
+    }
+    if (closeProviderModal) closeProviderModal.onclick = closeProviderSelectionModal;
+    if (cancelProviderModal) cancelProviderModal.onclick = closeProviderSelectionModal;
+    if (providerModalBackdrop) {
+      providerModalBackdrop.onclick = e => {
+        if (e.target === providerModalBackdrop) closeProviderSelectionModal();
+      };
+    }
+
+    if (saveProviderBtn) {
+      saveProviderBtn.onclick = () => {
+        const name = document.getElementById('newProviderName').value.trim();
+        const rif = document.getElementById('newProviderRif').value.trim();
+        if (!name || !rif) {
+          alert('Por favor, complete los campos obligatorios (Nombre y RIF).');
+          return;
+        }
+
+        // Agregar a la lista de proveedores
+        const optionText = name.toUpperCase() + ` (${rif.toUpperCase()})`;
+        providerList.push(optionText);
+
+        // Seleccionar automáticamente el recién creado
+        providerSearchInp.value = optionText;
+        providerHiddenInput.value = optionText;
+
+        // Re-render
+        renderProviderDropdown();
+
+        // Cerrar modal
+        closeProviderSelectionModal();
+        updateTabChecks();
+
+        // Reiniciar retenciones y recalcular para el nuevo proveedor
+        excludeRetentionPay = { iva: false, islr: false };
+        updateRestoreRetentionsBtnVisibility();
+        calculate();
+      };
+    }
+
+    // Datos jerárquicos de Conceptos de Egreso (Según la imagen provista)
+    const expenseConceptList = [
+      { value: "none", label: "Ninguno", depth: 0, isHeader: false, isNone: true },
+      { value: "5", label: "5 - COSTOS", depth: 0, isHeader: true },
+      { value: "5.1", label: "5.1 - COSTOS DE VENTAS", depth: 1, isHeader: false },
+      { value: "5.1.01", label: "5.1.01 - MERCANCIAS DISPONIBLES", depth: 2, isHeader: false },
+      { value: "5.1.01.001", label: "5.1.01.001 - INVENTARIO INICIAL DE MERCANCIAS", depth: 3, isHeader: false },
+      { value: "5.1.02", label: "5.1.02 - INVENTARIO FINAL DE MERCANCIAS", depth: 2, isHeader: false },
+      { value: "5.2", label: "5.2 - COSTOS DE SERVICIOS", depth: 1, isHeader: false },
+      { value: "5.2.01", label: "5.2.01 - COSTOS DE SERVICIOS", depth: 2, isHeader: false },
+      { value: "5.2.01.001", label: "5.2.01.001 - COMPRAS DE BIENES Y SERVICIOS", depth: 3, isHeader: false },
+      { value: "6", label: "6 - GASTOS", depth: 0, isHeader: true },
+      { value: "6.1", label: "6.1 - GASTOS OPERACIONALES", depth: 1, isHeader: false },
+      { value: "6.1.01", label: "6.1.01 - GASTOS DE PERSONAL", depth: 2, isHeader: false },
+      { value: "6.1.01.001", label: "6.1.01.001 - SUELDOS DE DIRECTORES", depth: 3, isHeader: false },
+      { value: "6.1.01.002", label: "6.1.01.002 - SUELDOS Y SALARIOS", depth: 3, isHeader: false }
+    ];
+
+    const expenseContainer = document.getElementById('expenseContainer');
+    const expenseSearchInp = document.getElementById('expenseSearchInp');
+    const expenseDropdownList = document.getElementById('expenseDropdownList');
+    const expenseHiddenInput = document.getElementById('expense');
+
+    function renderExpenseDropdown(query = '') {
+      const normQuery = query.toLowerCase().trim();
+      let html = '';
+
+      expenseConceptList.forEach(item => {
+        // Filtrar elementos según el texto ingresado
+        const matches = item.label.toLowerCase().includes(normQuery) || item.value.toLowerCase().includes(normQuery);
+        if (normQuery && !matches) return;
+
+        let itemText = item.label;
+        if (item.depth > 0 && !normQuery) {
+          // Agregar la flecha del árbol solo en la vista jerárquica normal (cuando no hay búsqueda activa)
+          itemText = `↳ ${item.label}`;
+        }
+
+        const classes = `tree-item tree-depth-${item.depth} ${item.isHeader ? 'tree-header' : ''} ${item.isNone ? 'none-option' : ''}`;
+
+        html += `<div class="${classes}" data-value="${item.value}" data-label="${item.label}" data-header="${item.isHeader}">
+          ${itemText}
+        </div>`;
+      });
+
+      if (!html) {
+        html = `<div style="padding:12px; text-align:center; color:var(--muted); font-size:12px;">No se encontraron resultados</div>`;
+      }
+
+      expenseDropdownList.innerHTML = html;
+    }
+
+    // Hacer foco en el input al dar clic en la caja outlined (borde o flecha)
+    document.getElementById('expenseSelectBox').onclick = (e) => {
+      if (e.target !== expenseSearchInp) {
+        expenseSearchInp.focus();
+      }
+    };
+
+    // Mostrar dropdown al enfocar
+    expenseSearchInp.addEventListener('focus', () => {
+      expenseContainer.classList.add('open');
+      // Limpiar texto temporal para facilitar búsqueda al enfocar si es el predeterminado
+      const val = expenseSearchInp.value;
+      if (val === "5.2.01.001 - COMPRAS DE BIENES Y SERVICIOS" || val === "Ninguno") {
+        renderExpenseDropdown("");
+      } else {
+        renderExpenseDropdown(val);
+      }
+    });
+
+    // Filtrar en tiempo real mientras se escribe
+    expenseSearchInp.addEventListener('input', (e) => {
+      expenseContainer.classList.add('open');
+      renderExpenseDropdown(e.target.value);
+    });
+
+    // Seleccionar elemento de la lista jerárquica
+    expenseDropdownList.addEventListener('click', (e) => {
+      const item = e.target.closest('.tree-item');
+      if (item) {
+        const isHeader = item.dataset.header === 'true';
+        if (isHeader) return; // Evitar seleccionar encabezados estructurales (5 - COSTOS, etc)
+
+        const label = item.dataset.label;
+
+        expenseSearchInp.value = label;
+        expenseHiddenInput.value = label; // Sincroniza con el input oculto para validaciones
+
+        expenseContainer.classList.remove('open');
+        updateTabChecks();
+      }
+    });
+
+    // Cerrar dropdown al hacer clic fuera del componente
+    document.addEventListener('click', (e) => {
+      if (!expenseContainer.contains(e.target)) {
+        expenseContainer.classList.remove('open');
+        // Si sale sin seleccionar y escribió algo inválido, restablecer al anterior
+        const val = expenseHiddenInput.value;
+        if (expenseSearchInp.value !== val) {
+          expenseSearchInp.value = val;
+        }
+      }
+    });
+
+    // Renderizar inicialmente
+    renderExpenseDropdown();
+
+    // Lógica para el selector de Partida Asociada (outlined y buscable)
+    const budgetList = [
+      "Sin partida",
+      "Partida de mantenimiento",
+      "Partida de servicios",
+      "Partida de personal"
+    ];
+
+    const budgetContainer = document.getElementById('budgetContainer');
+    const budgetSearchInp = document.getElementById('budgetSearchInp');
+    const budgetDropdownList = document.getElementById('budgetDropdownList');
+    const budgetHiddenInput = document.getElementById('budget');
+
+    function renderBudgetDropdown(query = '') {
+      const normQuery = query.toLowerCase().trim();
+      let html = '';
+
+      budgetList.forEach(budget => {
+        if (normQuery && !budget.toLowerCase().includes(normQuery)) return;
+
+        html += `<div class="tree-item" data-value="${budget}" data-label="${budget}">
+          ${budget}
+        </div>`;
+      });
+
+      if (!html) {
+        html = `<div style="padding:12px; text-align:center; color:var(--muted); font-size:12px;">No se encontraron resultados</div>`;
+      }
+
+      budgetDropdownList.innerHTML = html;
+    }
+
+    // Enfocar input y abrir dropdown
+    budgetSearchInp.addEventListener('focus', () => {
+      budgetContainer.classList.add('open');
+      renderBudgetDropdown(budgetSearchInp.value === "Sin partida" ? "" : budgetSearchInp.value);
+    });
+
+    // Buscar en tiempo real
+    budgetSearchInp.addEventListener('input', (e) => {
+      budgetContainer.classList.add('open');
+      renderBudgetDropdown(e.target.value);
+    });
+
+    // Seleccionar partida
+    budgetDropdownList.addEventListener('click', (e) => {
+      const item = e.target.closest('.tree-item');
+      if (item) {
+        const label = item.dataset.label;
+        budgetSearchInp.value = label;
+        budgetHiddenInput.value = label;
+        budgetContainer.classList.remove('open');
+        updateTabChecks();
+      }
+    });
+
+    // Clic en la caja outlined (borde o chevron) enfoca el input
+    document.getElementById('budgetSelectBox').onclick = (e) => {
+      if (e.target !== budgetSearchInp) {
+        budgetSearchInp.focus();
+      }
+    };
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!budgetContainer.contains(e.target)) {
+        budgetContainer.classList.remove('open');
+        // Si sale sin seleccionar y escribió algo inválido, restablecer al anterior
+        const val = budgetHiddenInput.value;
+        if (budgetSearchInp.value !== val) {
+          budgetSearchInp.value = val;
+        }
+      }
+    });
+
+    // Renderizar inicialmente
+    renderBudgetDropdown();
+
+    // Enfocar input de Descripción al dar clic en su contenedor outlined
+    const descBox = document.getElementById('descriptionSelectBox');
+    const descInp = document.getElementById('description');
+    if (descBox && descInp) {
+      descBox.onclick = (e) => {
+        if (e.target !== descInp) {
+          descInp.focus();
+        }
+      };
+    }
+
+    // Lógica para el selector de Condición de Pago en la modal
+    const condPagoContainer = document.getElementById('condPagoContainer');
+    const condPagoSearchInp = document.getElementById('condPagoSearchInp');
+    const condPagoDropdownList = document.getElementById('condPagoDropdownList');
+
+    function renderCondPagoDropdown() {
+      let html = `
+        <div class="tree-item" data-value="contado" data-label="CONTADO">CONTADO</div>
+        <div class="tree-item" data-value="credito" data-label="CRÉDITO">CRÉDITO</div>
+      `;
+      condPagoDropdownList.innerHTML = html;
+    }
+
+    if (condPagoSearchInp) {
+      condPagoSearchInp.addEventListener('focus', () => {
+        condPagoContainer.classList.add('open');
+        renderCondPagoDropdown();
+      });
+    }
+
+    if (condPagoDropdownList) {
+      condPagoDropdownList.addEventListener('click', (e) => {
+        const item = e.target.closest('.tree-item');
+        if (item) {
+          const val = item.dataset.value;
+          setCondition(val);
+          condPagoContainer.classList.remove('open');
+        }
+      });
+    }
+
+    const condBox = document.getElementById('condPagoSelectBox');
+    if (condBox) {
+      condBox.onclick = (e) => {
+        if (e.target !== condPagoSearchInp) {
+          condPagoSearchInp.focus();
+        }
+      };
+    }
+
+    document.addEventListener('click', (e) => {
+      if (condPagoContainer && !condPagoContainer.contains(e.target)) {
+        condPagoContainer.classList.remove('open');
+      }
+    });
+
+    renderCondPagoDropdown();
+
+    // Lógica para el input de Días de Crédito (Cálculo cruzado interactivo con Fecha de Vencimiento)
+    const creditDaysInp = document.getElementById('creditDaysInp');
+    if (creditDaysInp) {
+      creditDaysInp.addEventListener('input', () => {
+        updateDueDateFromDays();
+      });
+      creditDaysInp.addEventListener('change', () => {
+        updateDueDateFromDays();
+      });
+    }
+
+    const creditBox = document.getElementById('creditDaysSelectBox');
+    if (creditBox) {
+      creditBox.onclick = (e) => {
+        if (e.target !== creditDaysInp) {
+          creditDaysInp.focus();
+        }
+      };
+    }
+
+    // Si cambian la fecha de vencimiento manualmente, actualizar los días de crédito correspondientes
+    const dueDateInp = document.getElementById('dueDateInp');
+    if (dueDateInp) {
+      dueDateInp.addEventListener('change', () => {
+        updateDaysFromDueDate();
+      });
+      dueDateInp.addEventListener('input', () => {
+        updateDaysFromDueDate();
+      });
+    }
+
+    // Si cambia la fecha del documento principal, recalcular la fecha de vencimiento si es crédito
+    const docDateInp = document.getElementById('docDate');
+    if (docDateInp) {
+      docDateInp.addEventListener('change', () => {
+        if (currentCondition === 'credito') {
+          updateDueDateFromDays();
+        }
+      });
+      docDateInp.addEventListener('input', () => {
+        if (currentCondition === 'credito') {
+          updateDueDateFromDays();
+        }
+      });
+    }
+
+    // Lógica para alternar la visualización de los popovers de detalle de cálculo
+    function closeAllPopovers(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      document.querySelectorAll('.calc-popover').forEach(p => p.style.display = 'none');
+    }
+
+    const btnInvoice = document.getElementById('btnDetailInvoice');
+    const popInvoice = document.getElementById('popoverInvoice');
+    if (btnInvoice && popInvoice) {
+      btnInvoice.onclick = (e) => {
+        e.stopPropagation();
+        const isVisible = popInvoice.style.display === 'block';
+        closeAllPopovers();
+        popInvoice.style.display = isVisible ? 'none' : 'block';
+      };
+    }
+
+    const btnIva = document.getElementById('btnDetailIva');
+    const popIva = document.getElementById('popoverIva');
+    if (btnIva && popIva) {
+      btnIva.onclick = (e) => {
+        e.stopPropagation();
+        const isVisible = popIva.style.display === 'block';
+        closeAllPopovers();
+        popIva.style.display = isVisible ? 'none' : 'block';
+      };
+    }
+
+    const btnIslr = document.getElementById('btnDetailIslr');
+    const popIslr = document.getElementById('popoverIslr');
+    if (btnIslr && popIslr) {
+      btnIslr.onclick = (e) => {
+        e.stopPropagation();
+        const isVisible = popIslr.style.display === 'block';
+        closeAllPopovers();
+        popIslr.style.display = isVisible ? 'none' : 'block';
+      };
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.calc-popover') && !e.target.closest('.info-popover-btn')) {
+        closeAllPopovers();
+      }
+    });
+
+    calculate();
+    calculatePayments();
+    renderIcons();
+
+    // Vista de edición: agrega "?modo=editar" a la URL para ver el botón Guardar en el footer
+    if (new URLSearchParams(window.location.search).get('modo') === 'editar') {
+      document.getElementById('saveBtn').classList.remove('hidden');
+    }
+  </script>
+</body>
+
+</html>
